@@ -4,7 +4,6 @@ import org.andengine.engine.camera.Camera;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.opengl.util.GLState;
 
-import dnomyar.combo.managers.SceneManager;
 import dnomyar.combo.managers.SceneManager.SceneType;
 
 /**
@@ -26,7 +25,7 @@ public class SplashScene extends BaseScene {
             }
         };
         splash.setScale(1.5f);
-        splash.setPosition(CAMERA_WIDTH, CAMERA_HEIGHT);
+        splash.setPosition(CAMERA_CENTER_POS_X, CAMERA_CENTER_POS_Y);
         attachChild(splash);
     }
 

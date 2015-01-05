@@ -1,14 +1,22 @@
 package dnomyar.combo.scenes;
 
+import android.util.Log;
+
 import org.andengine.entity.scene.background.Background;
 import org.andengine.entity.scene.menu.MenuScene;
+import org.andengine.entity.scene.menu.MenuScene.IOnMenuItemClickListener;
+import org.andengine.entity.scene.menu.item.IMenuItem;
+import org.andengine.entity.scene.menu.item.SpriteMenuItem;
+import org.andengine.entity.scene.menu.item.TextMenuItem;
+import org.andengine.entity.scene.menu.item.decorator.ScaleMenuItemDecorator;
+import org.andengine.util.adt.color.Color;
 
 import dnomyar.combo.managers.SceneManager;
 
 /**
  * Created by Raymond on 2015-01-04.
  */
-public class MainMenuScene extends BaseScene {
+public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener {
 
     private MenuScene menuChildScene;
     private final int MENU_PLAY = 0;
@@ -17,6 +25,7 @@ public class MainMenuScene extends BaseScene {
     @Override
     public void createScene() {
         createBackgroud();
+        createMenuChildScene();
     }
 
     @Override
@@ -35,10 +44,39 @@ public class MainMenuScene extends BaseScene {
     }
 
     private void createBackgroud() {
-        setBackground(new Background(0,0,0));
+
     }
 
     private void createMenuChildScene() {
+        menuChildScene = new MenuScene(camera);
+        menuChildScene.setScale(1.0f);
+        Log.d("sss",  "Center X: " + camera.getCenterX());
+        Log.d("sss",  "Center Y: " + camera.getCenterY());
 
+        menuChildScene.setPosition(camera.getCenterX(), camera.getCenterY());
+        final IMenuItem playMenuItem = new ScaleMenuItemDecorator(new TextMenuItem(MENU_PLAY, resourcesManager.mFont, "PLAY", vbom), 1.2f, 1);
+        menuChildScene.addMenuItem(playMenuItem);
+
+        menuChildScene.buildAnimations();
+        menuChildScene.setBackgroundEnabled(false);
+
+        // Child element, place it at center
+        playMenuItem.setPosition(0,0);
+
+        menuChildScene.setOnMenuItemClickListener(this);
+        setChildScene(menuChildScene);
+    }
+
+    @Override
+    public boolean onMenuItemClicked(MenuScene pMenuScene, IMenuItem pMenuItem, float pMenuItemLocalX, float pMenuItemLocalY) {
+        switch(pMenuItem.getID()) {
+            case MENU_PLAY:
+                SceneManager.getInstance().loadGameScene(engine);
+                return true;
+            case MENU_OPTIONS:
+                return true;
+            default:
+                return false;
+        }
     }
 }

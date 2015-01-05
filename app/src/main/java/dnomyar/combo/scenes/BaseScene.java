@@ -15,8 +15,14 @@ import dnomyar.combo.managers.SceneManager.SceneType;
  */
 public abstract class BaseScene extends Scene {
 
-    protected static final int CAMERA_WIDTH = 240;
-    protected static final int CAMERA_HEIGHT = 400;
+    protected static final int CAMERA_WIDTH = 480;
+    protected static final int CAMERA_HEIGHT = 800;
+
+    protected static final int CAMERA_CENTER_WIDTH = CAMERA_WIDTH / 2;
+    protected static final int CAMERA_CENTER_HEIGHT = CAMERA_HEIGHT / 2;
+
+    protected static final int CAMERA_CENTER_POS_X = CAMERA_WIDTH / 2;
+    protected static final int CAMERA_CENTER_POS_Y = CAMERA_HEIGHT / 2;
 
     //---------------------------------------------
     // VARIABLES

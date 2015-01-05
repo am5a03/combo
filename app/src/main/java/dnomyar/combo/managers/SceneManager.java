@@ -1,9 +1,14 @@
 package dnomyar.combo.managers;
 
 import org.andengine.engine.Engine;
+import org.andengine.engine.handler.timer.ITimerCallback;
+import org.andengine.engine.handler.timer.TimerHandler;
 import org.andengine.ui.IGameInterface.OnCreateSceneCallback;
 
 import dnomyar.combo.scenes.BaseScene;
+import dnomyar.combo.scenes.GameScene;
+import dnomyar.combo.scenes.LoadingScene;
+import dnomyar.combo.scenes.MainMenuScene;
 import dnomyar.combo.scenes.SplashScene;
 
 /**
@@ -103,5 +108,46 @@ public class SceneManager {
         ResourcesManager.getInstance().unloadSplashScreen();
         splashScene.disposeScene();
         splashScene = null;
+    }
+
+
+    public void createMenuScene()
+    {
+        ResourcesManager.getInstance().loadMenuResources();
+        menuScene = new MainMenuScene();
+        loadingScene = new LoadingScene();
+        SceneManager.getInstance().setScene(menuScene);
+        disposeSplashScene();
+    }
+
+    public void loadGameScene(final Engine mEngine) {
+        setScene(loadingScene);
+        mEngine.registerUpdateHandler(new TimerHandler(0.1f, new ITimerCallback(){
+            @Override
+            public void onTimePassed(TimerHandler pTimerHandler) {
+                mEngine.unregisterUpdateHandler(pTimerHandler);
+                ResourcesManager.getInstance().loadGameResources();
+                gameScene = new GameScene();
+                setScene(gameScene);
+            }
+        }));
+    }
+
+    /**
+     *
+     * @param mEngine
+     */
+    public void loadMenuScene(final Engine mEngine) {
+        setScene(loadingScene);
+        gameScene.disposeScene();
+        ResourcesManager.getInstance().unloadGameTextures();
+        mEngine.registerUpdateHandler(new TimerHandler(0.1f, new ITimerCallback() {
+            public void onTimePassed(final TimerHandler pTimerHandler)
+            {
+                mEngine.unregisterUpdateHandler(pTimerHandler);
+//                ResourcesManager.getInstance().loadMenuTextures();
+                setScene(menuScene);
+            }
+        }));
     }
 }

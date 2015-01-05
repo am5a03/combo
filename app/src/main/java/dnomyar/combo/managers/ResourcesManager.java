@@ -1,17 +1,17 @@
 package dnomyar.combo.managers;
 
+import android.graphics.Color;
+
 import org.andengine.engine.Engine;
 import org.andengine.engine.camera.Camera;
+import org.andengine.opengl.font.Font;
+import org.andengine.opengl.font.FontFactory;
 import org.andengine.opengl.texture.TextureOptions;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
-import org.andengine.opengl.texture.atlas.bitmap.BuildableBitmapTextureAtlas;
-import org.andengine.opengl.texture.atlas.bitmap.source.IBitmapTextureAtlasSource;
-import org.andengine.opengl.texture.atlas.buildable.builder.BlackPawnTextureAtlasBuilder;
-import org.andengine.opengl.texture.atlas.buildable.builder.ITextureAtlasBuilder.TextureAtlasBuilderException;
 import org.andengine.opengl.texture.region.ITextureRegion;
+import org.andengine.opengl.texture.region.TextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
-import org.andengine.util.debug.Debug;
 
 import dnomyar.combo.activities.GameActivity;
 
@@ -35,7 +35,11 @@ public class ResourcesManager {
     // TEXTURES & TEXTURE REGIONS
     //---------------------------------------------
     public ITextureRegion splash_region;
-    private BitmapTextureAtlas splashTextureAtlas;
+    private BitmapTextureAtlas mSplashTextureAtlas;
+    private BitmapTextureAtlas mFontTextureAtlas;
+    public Font mFont;
+    private TextureRegion mFaceTextureRegion;
+
 
     //---------------------------------------------
     // CLASS LOGIC
@@ -45,6 +49,7 @@ public class ResourcesManager {
     {
         loadMenuGraphics();
         loadMenuAudio();
+        loadMenuFonts();
     }
 
     public void loadGameResources()
@@ -57,6 +62,17 @@ public class ResourcesManager {
     private void loadMenuGraphics()
     {
 
+    }
+
+    private void loadMenuFonts()
+    {
+        /* Load Font/Textures. */
+        FontFactory.setAssetBasePath("gfx/fonts/");
+        this.mFontTextureAtlas = new BitmapTextureAtlas(activity.getTextureManager(), 256, 256, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
+        this.mFont = FontFactory.createFromAsset(activity.getFontManager(), this.mFontTextureAtlas, activity.getAssets(), "manteka.ttf", 24f, true, Color.WHITE);
+//        activity.getTextureManager().loadTexture(this.mFontTextureAtlas);
+//        activity.getFontManager().loadFont(this.mFont);
+        this.mFont.load();
     }
 
     private void loadMenuAudio()
@@ -82,16 +98,21 @@ public class ResourcesManager {
     public void loadSplashScreen()
     {
         BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/");
-        splashTextureAtlas = new BitmapTextureAtlas(activity.getTextureManager(), 256, 256, TextureOptions.BILINEAR);
-        splash_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(splashTextureAtlas, activity, "splash.png", 0, 0);
-        splashTextureAtlas.load();
+        mSplashTextureAtlas = new BitmapTextureAtlas(activity.getTextureManager(), 256, 256, TextureOptions.BILINEAR);
+        splash_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(mSplashTextureAtlas, activity, "splash.png", 0, 0);
+        mSplashTextureAtlas.load();
     }
 
     public void unloadSplashScreen()
     {
-        splashTextureAtlas.unload();
+        mSplashTextureAtlas.unload();
         splash_region = null;
     }
+
+    public void unloadGameTextures() {
+        //Todo
+    }
+
 
     /**
      * @param engine
