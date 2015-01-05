@@ -6,6 +6,7 @@ import org.andengine.entity.text.TextOptions;
 import org.andengine.util.adt.align.HorizontalAlign;
 import org.andengine.util.adt.color.Color;
 
+import dnomyar.combo.huds.Control;
 import dnomyar.combo.huds.Score;
 import dnomyar.combo.managers.SceneManager;
 import dnomyar.combo.managers.SceneManager.SceneType;
@@ -17,6 +18,7 @@ public class GameScene extends BaseScene {
 
     private HUD gameHUD;
     private Score score;
+    private Control control;
 
     @Override
     public void createScene() {
@@ -50,9 +52,12 @@ public class GameScene extends BaseScene {
         gameHUD = new HUD();
         score = new Score(CAMERA_CENTER_WIDTH/2, CAMERA_HEIGHT - 20, resourcesManager.mFont, "Score: 0123456789", new TextOptions(HorizontalAlign.LEFT), vbom);
         score.init();
+
+        control = new Control(CAMERA_CENTER_WIDTH, 0, vbom);
         gameHUD.attachChild(score);
+        gameHUD.attachChild(control);
 
-
+        score.addScore(10000);
         camera.setHUD(gameHUD);
     }
 }
