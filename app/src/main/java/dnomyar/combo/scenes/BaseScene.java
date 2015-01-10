@@ -9,20 +9,21 @@ import android.app.Activity;
 
 import dnomyar.combo.managers.ResourcesManager;
 import dnomyar.combo.managers.SceneManager.SceneType;
+import dnomyar.combo.utils.Constants;
 
 /**
  * Created by Raymond on 2015-01-04.
  */
 public abstract class BaseScene extends Scene {
 
-    protected static final int CAMERA_WIDTH = 480;
-    protected static final int CAMERA_HEIGHT = 800;
+    public static final int CAMERA_WIDTH = Constants.CAMERA_WIDTH;
+    public static final int CAMERA_HEIGHT = Constants.CAMERA_HEIGHT;
 
-    protected static final int CAMERA_CENTER_WIDTH = CAMERA_WIDTH / 2;
-    protected static final int CAMERA_CENTER_HEIGHT = CAMERA_HEIGHT / 2;
+    public static final int CAMERA_CENTER_WIDTH = CAMERA_WIDTH / 2;
+    public static final int CAMERA_CENTER_HEIGHT = CAMERA_HEIGHT / 2;
 
-    protected static final int CAMERA_CENTER_POS_X = CAMERA_WIDTH / 2;
-    protected static final int CAMERA_CENTER_POS_Y = CAMERA_HEIGHT / 2;
+    public static final int CAMERA_CENTER_POS_X = CAMERA_WIDTH / 2;
+    public static final int CAMERA_CENTER_POS_Y = CAMERA_HEIGHT / 2;
 
     //---------------------------------------------
     // VARIABLES

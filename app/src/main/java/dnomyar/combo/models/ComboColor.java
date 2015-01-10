@@ -17,4 +17,13 @@ public enum ComboColor {
     public static ComboColor randomColor()  {
         return VALUES.get(RANDOM.nextInt(SIZE));
     }
+
+    @Override
+    public String toString() {
+        String name = this.name();
+        name = name.toLowerCase();
+        char[] _name = name.toCharArray();
+        _name[0] = Character.toUpperCase(_name[0]);
+        return new String(_name);
+    }
 }

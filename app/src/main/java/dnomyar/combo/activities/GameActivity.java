@@ -18,6 +18,7 @@ import java.io.IOException;
 
 import dnomyar.combo.managers.ResourcesManager;
 import dnomyar.combo.managers.SceneManager;
+import dnomyar.combo.scenes.BaseScene;
 
 /**
  *
@@ -27,8 +28,8 @@ public class GameActivity extends BaseGameActivity {
 
     private Camera mCamera;
     private ResourcesManager mResourcesManager;
-    private static final int CAMERA_WIDTH = 480;
-    private static final int CAMERA_HEIGHT = 800;
+    private static final int CAMERA_WIDTH = BaseScene.CAMERA_WIDTH;
+    private static final int CAMERA_HEIGHT = BaseScene.CAMERA_HEIGHT;
 
     @Override
     public Engine onCreateEngine(EngineOptions pEngineOptions) {
@@ -81,7 +82,7 @@ public class GameActivity extends BaseGameActivity {
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK) {
+        if (keyCode == KeyEvent.KEYCODE_BACK){
             SceneManager.getInstance().getCurrentScene().onBackKeyPressed();
         }
         return false;

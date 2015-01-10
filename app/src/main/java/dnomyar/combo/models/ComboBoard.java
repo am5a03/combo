@@ -1,5 +1,7 @@
 package dnomyar.combo.models;
 
+import java.util.ArrayList;
+
 /**
  * Created by Raymond on 2015-01-04.
  */
@@ -19,19 +21,14 @@ public class ComboBoard {
         }
     }
 
-    /**
-     *
-     * @param inputColors User input
-     * @param idx Index
-     * @return boolean
-     */
-    public boolean isMissed(ComboColor[] inputColors, int idx) {
+
+    public boolean isMissed(ArrayList<ComboColor> inputColors, int idx) {
         if (idx >= this.mBoardSize) {
             // Idx should not greater than size
             return true;
         }
 
-        if (this.mComboColors[idx].equals(inputColors[idx])) {
+        if (this.mComboColors[idx].equals(inputColors.get(idx))) {
             return false;
         } else {
             return true;
@@ -43,22 +40,30 @@ public class ComboBoard {
      * @param inputColors
      * @return
      */
-    public boolean isWon(ComboColor[] inputColors) {
+    public boolean isWon(ArrayList<ComboColor> inputColors) {
 
         int range = 0;
 
-        if (inputColors.length == this.mBoardSize) {
+        if (inputColors.size() == this.mBoardSize) {
             range = this.mBoardSize;
         } else {
-            range = inputColors.length;
+            return false;
         }
 
         for (int i = 0; i < range; i++) {
-            if (!inputColors[i].equals(this.mComboColors[i])) {
+            if (!inputColors.get(i).equals(this.mComboColors[i])) {
                 return false;
             }
         }
 
-        return false;
+        return true;
+    }
+
+    public ComboColor[] getComboColors() {
+        return this.mComboColors;
+    }
+
+    public int getSize() {
+        return this.mBoardSize;
     }
 }

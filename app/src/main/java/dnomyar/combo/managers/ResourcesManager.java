@@ -14,6 +14,7 @@ import org.andengine.opengl.texture.region.TextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
 import dnomyar.combo.activities.GameActivity;
+import dnomyar.combo.utils.Constants;
 
 
 /**
@@ -69,7 +70,7 @@ public class ResourcesManager {
         /* Load Font/Textures. */
         FontFactory.setAssetBasePath("gfx/fonts/");
         this.mFontTextureAtlas = new BitmapTextureAtlas(activity.getTextureManager(), 256, 256, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
-        this.mFont = FontFactory.createFromAsset(activity.getFontManager(), this.mFontTextureAtlas, activity.getAssets(), "manteka.ttf", 24f, true, Color.WHITE);
+        this.mFont = FontFactory.createFromAsset(activity.getFontManager(), this.mFontTextureAtlas, activity.getAssets(), "manteka.ttf", Constants.TEXT_SIZE, true, Color.WHITE);
 //        activity.getTextureManager().loadTexture(this.mFontTextureAtlas);
 //        activity.getFontManager().loadFont(this.mFont);
         this.mFont.load();
