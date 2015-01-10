@@ -34,14 +34,6 @@ public class GameBoard extends Rectangle implements IButtonTouchListener {
         super(pX, pY, pWidth, pHeight, pVertexBufferObjectManager);
     }
 
-    public GameBoard(float pX, float pY, float pWidth, float pHeight, VertexBufferObjectManager pVertexBufferObjectManager, DrawType pDrawType) {
-        super(pX, pY, pWidth, pHeight, pVertexBufferObjectManager, pDrawType);
-    }
-
-    public GameBoard(float pX, float pY, float pWidth, float pHeight, IRectangleVertexBufferObject pRectangleVertexBufferObject) {
-        super(pX, pY, pWidth, pHeight, pRectangleVertexBufferObject);
-    }
-
     public GameBoard(float pX, float pY, float pWidth, float pHeight, VertexBufferObjectManager pVertexBufferObjectManager, int size) {
         this(pX, pY, pWidth, pHeight, pVertexBufferObjectManager);
         this.mComboBoard = new ComboBoard(size);

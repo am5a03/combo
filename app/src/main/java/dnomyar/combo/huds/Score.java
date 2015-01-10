@@ -92,6 +92,10 @@ public class Score extends Text {
         this.setText("Score: " + score);
     }
 
+    public void setScore(int score) {
+        this.setText("Score: " + score);
+    }
+
     public void init() {
         this.setText("Score: " + score);
     }

@@ -60,6 +60,10 @@ public class Control extends Entity {
         return this.buttons[idx];
     }
 
+    public RectangleButton[] getButtons() {
+        return this.buttons;
+    }
+
     /**
      * Register control buttons, so that when buttons are touched, relevant colour is dispatched to the board and
      * for checking
