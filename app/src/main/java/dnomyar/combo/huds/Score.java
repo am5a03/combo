@@ -33,6 +33,7 @@ public class Score extends Text {
 
     public Score(float pX, float pY, IFont pFont, CharSequence pText, TextOptions pTextOptions, VertexBufferObjectManager pVertexBufferObjectManager) {
         super(pX, pY, pFont, pText, pTextOptions, pVertexBufferObjectManager);
+        this.init();
     }
 
     public Score(float pX, float pY, IFont pFont, CharSequence pText, TextOptions pTextOptions, VertexBufferObjectManager pVertexBufferObjectManager, ShaderProgram pShaderProgram) {

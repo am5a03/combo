@@ -78,7 +78,6 @@ public class GameScene extends BaseScene implements IGameBoardStateListener {
         gameHUD = new HUD();
         camera.setCenter(CAMERA_CENTER_POS_X, CAMERA_CENTER_POS_Y);
         scoreText = new Score(CAMERA_CENTER_WIDTH/2, CAMERA_HEIGHT - 100, resourcesManager.mFont, "Score: 0123456789", new TextOptions(HorizontalAlign.LEFT), vbom);
-        scoreText.init();
         control = new Control(CAMERA_CENTER_POS_X/2, CAMERA_CENTER_POS_Y/6, CAMERA_WIDTH, CAMERA_HEIGHT, vbom);
         progressBar = new ProgressBar(CAMERA_CENTER_WIDTH, CAMERA_HEIGHT, CAMERA_WIDTH, 50, vbom);
 //        progressBar.setProgress(40);
@@ -130,6 +129,9 @@ public class GameScene extends BaseScene implements IGameBoardStateListener {
 
     @Override
     public void onWon() {
+        if (this.globalTime <= 0) {
+            return;
+        }
         this.level = Math.min(++this.level, MAX_LEVEL);
         int multiplier = (this.comboCount == 0) ? 1 : this.comboCount;
         this.score += this.currentScore * multiplier;
@@ -145,6 +147,9 @@ public class GameScene extends BaseScene implements IGameBoardStateListener {
 
     @Override
     public void onMiss() {
+        if (this.globalTime <= 0) {
+            return;
+        }
         Log.d("GameScene", "Miss");
         this.detachChildren();
         this.createGameBoard(this.level);
@@ -155,6 +160,9 @@ public class GameScene extends BaseScene implements IGameBoardStateListener {
 
     @Override
     public void onHit() {
+        if (this.globalTime <= 0) {
+            return;
+        }
         Log.d("GameScene", "Hit");
         this.comboCount++;
         this.currentScore++;
