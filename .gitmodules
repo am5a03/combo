@@ -1,0 +1,6 @@
+[submodule "andEngine"]
+	path = andEngine
+	url = ./andEngine
+[submodule "andEnginePhysicsBox2DExtension"]
+	path = andEnginePhysicsBox2DExtension
+	url = ./andEnginePhysicsBox2DExtension

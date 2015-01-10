@@ -6,5 +6,3 @@
 /build
 *.iml
 .idea/
-andEngine/
-andEnginePhysicsBox2DExtension/
