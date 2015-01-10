@@ -82,7 +82,7 @@ public class GameBoard extends Rectangle implements IButtonTouchListener {
             this.mGameBoardListener.onMiss();
         } else {
 //            Log.d("Board", " Hit " + c);
-            this.getChildByIndex(this.mInputIndex).setColor(ColorUtils.getDefaultGrey());
+            this.getChildByIndex(this.mInputIndex).setAlpha(150f);
             if (this.mComboBoard.isWon(mInputColors)) {
 //                Log.d("Board", " Won ");
                 this.mGameBoardListener.onWon();

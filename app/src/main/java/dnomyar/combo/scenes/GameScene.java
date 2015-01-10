@@ -1,19 +1,22 @@
 package dnomyar.combo.scenes;
 
+import android.graphics.Color;
 import android.util.Log;
 
 import org.andengine.engine.camera.hud.HUD;
 import org.andengine.engine.handler.timer.ITimerCallback;
 import org.andengine.engine.handler.timer.TimerHandler;
 import org.andengine.entity.scene.background.Background;
+import org.andengine.entity.text.Text;
 import org.andengine.entity.text.TextOptions;
 import org.andengine.util.adt.align.HorizontalAlign;
 
+import dnomyar.combo.huds.ComboText;
 import dnomyar.combo.huds.Control;
 import dnomyar.combo.huds.GameBoard;
 import dnomyar.combo.huds.ProgressBar;
 import dnomyar.combo.huds.RectangleButton;
-import dnomyar.combo.huds.Score;
+import dnomyar.combo.huds.ScoreText;
 import dnomyar.combo.listeners.IGameBoardStateListener;
 import dnomyar.combo.managers.SceneManager;
 import dnomyar.combo.managers.SceneManager.SceneType;
@@ -31,7 +34,8 @@ public class GameScene extends BaseScene implements IGameBoardStateListener {
     private static final int DEFAULT_GAME_TIME = 60;
 
     private HUD gameHUD;
-    private Score scoreText;
+    private ScoreText scoreText;
+    private ComboText comboText;
     private Control control;
     private ProgressBar progressBar;
 
@@ -77,13 +81,16 @@ public class GameScene extends BaseScene implements IGameBoardStateListener {
     private void createHUD() {
         gameHUD = new HUD();
         camera.setCenter(CAMERA_CENTER_POS_X, CAMERA_CENTER_POS_Y);
-        scoreText = new Score(CAMERA_CENTER_WIDTH/2, CAMERA_HEIGHT - 100, resourcesManager.mFont, "Score: 0123456789", new TextOptions(HorizontalAlign.LEFT), vbom);
+        scoreText = new ScoreText(CAMERA_CENTER_POS_X/2, CAMERA_HEIGHT - 100, resourcesManager.mFont, "Score: 0123456789", new TextOptions(HorizontalAlign.LEFT), vbom);
+        comboText = new ComboText(CAMERA_CENTER_POS_X, CAMERA_HEIGHT - 180, resourcesManager.mFont, "x1234567890", new TextOptions(HorizontalAlign.RIGHT), vbom);
+        comboText.setText("");
         control = new Control(CAMERA_CENTER_POS_X/2, CAMERA_CENTER_POS_Y/6, CAMERA_WIDTH, CAMERA_HEIGHT, vbom);
         progressBar = new ProgressBar(CAMERA_CENTER_WIDTH, CAMERA_HEIGHT, CAMERA_WIDTH, 50, vbom);
-//        progressBar.setProgress(40);
+
         gameHUD.attachChild(scoreText);
         gameHUD.attachChild(control);
         gameHUD.attachChild(progressBar);
+        gameHUD.attachChild(comboText);
 
 
         for (RectangleButton rb : control.getButtons()) {
@@ -119,7 +126,7 @@ public class GameScene extends BaseScene implements IGameBoardStateListener {
                 if(globalTime <= 0){
                     GameScene.this.progressBar.setProgress(0);
                     GameScene.this.unregisterUpdateHandler(pTimerHandler);
-                    //GameOver();
+                    GameScene.this.gameOver();
                 }
                 pTimerHandler.reset();
 
@@ -134,7 +141,7 @@ public class GameScene extends BaseScene implements IGameBoardStateListener {
         }
         this.level = Math.min(++this.level, MAX_LEVEL);
         int multiplier = (this.comboCount == 0) ? 1 : this.comboCount;
-        this.score += this.currentScore * multiplier;
+        this.score += (this.currentScore * multiplier == 0) ? 1 : this.currentScore * multiplier;
         this.detachChildren();
         this.createGameBoard(this.level);
         this.scoreText.setScore(this.score);
@@ -143,6 +150,10 @@ public class GameScene extends BaseScene implements IGameBoardStateListener {
         if (this.globalTime <= DEFAULT_GAME_TIME) {
             this.globalTime += BASE_BONUS_TIME;
         }
+
+        this.comboCount++;
+        this.comboText.setComboTextAccordingToComboCount(this.comboCount);
+
     }
 
     @Override
@@ -156,6 +167,7 @@ public class GameScene extends BaseScene implements IGameBoardStateListener {
         this.comboCount = 0;
         this.currentScore = 0;
         this.globalTime -= PENALTY_TIME;
+        this.comboText.reset();
     }
 
     @Override
@@ -166,7 +178,11 @@ public class GameScene extends BaseScene implements IGameBoardStateListener {
         Log.d("GameScene", "Hit");
         this.comboCount++;
         this.currentScore++;
+        this.comboText.setComboTextAccordingToComboCount(this.comboCount);
     }
 
+    protected void gameOver() {
+
+    }
 
 }

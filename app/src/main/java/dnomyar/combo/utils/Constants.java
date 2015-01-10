@@ -13,7 +13,10 @@ public class Constants {
     public static final int CAMERA_CENTER_POS_X = CAMERA_WIDTH / 2;
     public static final int CAMERA_CENTER_POS_Y = CAMERA_HEIGHT / 2;
 
-    public static final float TEXT_SIZE = CAMERA_WIDTH/20f;
+    public static final float TEXT_SIZE_NORMAL = CAMERA_WIDTH/20f;
+    public static final float TEXT_SIZE_SMALL = CAMERA_WIDTH/40f;
+
+
     public static final int SQUARE_SIZE = (int)(CAMERA_CENTER_WIDTH/8f);
 
 }
