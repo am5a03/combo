@@ -1,1 +1,3 @@
 include ':app', ':andEngine', 'andEnginePhysicsBox2DExtension'
+project(':andEngine').projectDir = new File('libprojects/andEngine')
+project(':andEnginePhysicsBox2DExtension').projectDir = new File('libprojects/andEnginePhysicsBox2DExtension')
