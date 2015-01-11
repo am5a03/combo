@@ -1,6 +1,6 @@
-[submodule "andEngine"]
+[submodule "libprojects/andEngine"]
 	path = libprojects/andEngine
 	url = https://github.com/nicolasgramlich/AndEngine.git
-[submodule "andEnginePhysicsBox2DExtension"]
+[submodule "libprojects/andEnginePhysicsBox2DExtension"]
 	path = libprojects/andEnginePhysicsBox2DExtension
 	url = https://github.com/nicolasgramlich/AndEnginePhysicsBox2DExtension.git
