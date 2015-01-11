@@ -6,6 +6,7 @@ import org.andengine.engine.handler.timer.TimerHandler;
 import org.andengine.ui.IGameInterface.OnCreateSceneCallback;
 
 import dnomyar.combo.scenes.BaseScene;
+import dnomyar.combo.scenes.GameOverScene;
 import dnomyar.combo.scenes.GameScene;
 import dnomyar.combo.scenes.LoadingScene;
 import dnomyar.combo.scenes.MainMenuScene;
@@ -23,6 +24,7 @@ public class SceneManager {
     private BaseScene menuScene;
     private BaseScene gameScene;
     private BaseScene loadingScene;
+    private GameOverScene gameOverScene;
 
     //---------------------------------------------
     // VARIABLES
@@ -42,6 +44,7 @@ public class SceneManager {
         SCENE_MENU,
         SCENE_GAME,
         SCENE_LOADING,
+        SCENE_GAME_OVER,
     }
 
     //---------------------------------------------
@@ -71,6 +74,8 @@ public class SceneManager {
             case SCENE_LOADING:
                 setScene(loadingScene);
                 break;
+            case SCENE_GAME_OVER:
+                setScene(gameOverScene);
             default:
                 break;
         }
@@ -110,7 +115,6 @@ public class SceneManager {
         splashScene = null;
     }
 
-
     public void createMenuScene()
     {
         ResourcesManager.getInstance().loadMenuResources();
@@ -118,6 +122,14 @@ public class SceneManager {
         loadingScene = new LoadingScene();
         SceneManager.getInstance().setScene(menuScene);
         disposeSplashScene();
+    }
+
+    public void createGameOverScene(long score) {
+        gameOverScene = new GameOverScene();
+        gameOverScene.setScore(score);
+        SceneManager.getInstance().setScene(gameOverScene);
+
+        gameScene.disposeScene();
     }
 
     public void loadGameScene(final Engine mEngine) {

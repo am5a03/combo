@@ -6,10 +6,14 @@ import android.util.Log;
 import org.andengine.engine.camera.hud.HUD;
 import org.andengine.engine.handler.timer.ITimerCallback;
 import org.andengine.engine.handler.timer.TimerHandler;
+import org.andengine.entity.primitive.Rectangle;
+import org.andengine.entity.scene.ITouchArea;
+import org.andengine.entity.scene.Scene;
 import org.andengine.entity.scene.background.Background;
 import org.andengine.entity.text.Text;
 import org.andengine.entity.text.TextOptions;
 import org.andengine.util.adt.align.HorizontalAlign;
+import org.andengine.util.adt.list.SmartList;
 
 import dnomyar.combo.huds.ComboText;
 import dnomyar.combo.huds.Control;
@@ -21,6 +25,7 @@ import dnomyar.combo.listeners.IGameBoardStateListener;
 import dnomyar.combo.managers.SceneManager;
 import dnomyar.combo.managers.SceneManager.SceneType;
 import dnomyar.combo.utils.ColorUtils;
+import dnomyar.combo.utils.Constants;
 
 /**
  * Created by Raymond on 2015-01-04.
@@ -42,7 +47,7 @@ public class GameScene extends BaseScene implements IGameBoardStateListener {
     private int level;
     private float globalTime = 60f; //Set to 1 min
     private int comboCount = 0;
-    private int score = 0;
+    private long score = 0;
     private int currentScore = 0;
 
     @Override
@@ -168,6 +173,7 @@ public class GameScene extends BaseScene implements IGameBoardStateListener {
         this.currentScore = 0;
         this.globalTime -= PENALTY_TIME;
         this.comboText.reset();
+        this.progressBar.setProgress(this.globalTime/DEFAULT_GAME_TIME);
     }
 
     @Override
@@ -182,6 +188,13 @@ public class GameScene extends BaseScene implements IGameBoardStateListener {
     }
 
     protected void gameOver() {
+        int multiplier = (this.comboCount == 0) ? 1 : this.comboCount;
+        this.score += this.currentScore * multiplier;
+        this.comboCount = 0;
+        this.scoreText.setScore(this.score);
+        this.comboText.reset();
+        this.gameHUD.clearTouchAreas();
+        SceneManager.getInstance().createGameOverScene(this.score);
 
     }
 

@@ -25,7 +25,7 @@ public class ScoreText extends Text {
         this.setText("Score: " + score);
     }
 
-    public void setScore(int score) {
+    public void setScore(long score) {
         this.setText("Score: " + score);
     }
 
