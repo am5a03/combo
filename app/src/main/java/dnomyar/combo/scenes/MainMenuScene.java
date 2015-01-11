@@ -9,9 +9,13 @@ import org.andengine.entity.scene.menu.item.IMenuItem;
 import org.andengine.entity.scene.menu.item.SpriteMenuItem;
 import org.andengine.entity.scene.menu.item.TextMenuItem;
 import org.andengine.entity.scene.menu.item.decorator.ScaleMenuItemDecorator;
+import org.andengine.entity.text.Text;
+import org.andengine.entity.text.TextOptions;
+import org.andengine.util.adt.align.HorizontalAlign;
 import org.andengine.util.adt.color.Color;
 
 import dnomyar.combo.managers.SceneManager;
+import dnomyar.combo.utils.ColorUtils;
 
 /**
  * Created by Raymond on 2015-01-04.
@@ -44,7 +48,7 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
     }
 
     private void createBackgroud() {
-
+        setBackground(new Background(ColorUtils.getDefaultGrey()));
     }
 
     private void createMenuChildScene() {
@@ -55,6 +59,9 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
 
         menuChildScene.setPosition(camera.getCenterX(), camera.getCenterY());
         final IMenuItem playMenuItem = new ScaleMenuItemDecorator(new TextMenuItem(MENU_PLAY, resourcesManager.mFont, "PLAY", vbom), 1.2f, 1);
+        Text title = new Text(0, CAMERA_CENTER_POS_Y - 120, resourcesManager.mFont, "Combo", new TextOptions(HorizontalAlign.CENTER), vbom);
+        title.setScale(2.0f);
+        menuChildScene.attachChild(title);
         menuChildScene.addMenuItem(playMenuItem);
 
         menuChildScene.buildAnimations();

@@ -35,7 +35,7 @@ public class GameOverScene extends BaseScene implements MenuScene.IOnMenuItemCli
 
     @Override
     public void onBackKeyPressed() {
-
+        SceneManager.getInstance().loadMenuScene(engine);
     }
 
     @Override

@@ -35,8 +35,9 @@ public class GameScene extends BaseScene implements IGameBoardStateListener {
     private static final int START_LEVEL = 1;
     private static final int MAX_LEVEL = 140;
     private static final int PENALTY_TIME = 3;
-    private static final int BASE_BONUS_TIME = 1;
-    private static final int DEFAULT_GAME_TIME = 60;
+    private static final int BASE_BONUS_TIME = 2;
+    private static final float DEFAULT_GAME_TIME = 60f;
+    private static final float START_TIME = 30f;
 
     private HUD gameHUD;
     private ScoreText scoreText;
@@ -45,7 +46,7 @@ public class GameScene extends BaseScene implements IGameBoardStateListener {
     private ProgressBar progressBar;
 
     private int level;
-    private float globalTime = 60f; //Set to 1 min
+    private float globalTime = START_TIME; //Set to 1 min
     private int comboCount = 0;
     private long score = 0;
     private int currentScore = 0;
@@ -56,7 +57,7 @@ public class GameScene extends BaseScene implements IGameBoardStateListener {
         createHUD();
         this.level = START_LEVEL;
         this.score = 0;
-        this.globalTime = DEFAULT_GAME_TIME;
+        this.globalTime = START_TIME;
         this.createGameBoard(this.level);
         this.registerUpdateHandler();
     }
@@ -96,6 +97,8 @@ public class GameScene extends BaseScene implements IGameBoardStateListener {
         gameHUD.attachChild(control);
         gameHUD.attachChild(progressBar);
         gameHUD.attachChild(comboText);
+
+        progressBar.setProgress(START_TIME/DEFAULT_GAME_TIME);
 
 
         for (RectangleButton rb : control.getButtons()) {
