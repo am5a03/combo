@@ -1,5 +1,6 @@
 package dnomyar.combo.managers;
 
+import android.content.res.AssetManager;
 import android.graphics.Color;
 
 import org.andengine.engine.Engine;
@@ -15,6 +16,7 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
 import dnomyar.combo.activities.GameActivity;
 import dnomyar.combo.utils.Constants;
+import dnomyar.combo.utils.JsonHelper;
 
 
 /**

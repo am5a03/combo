@@ -1,6 +1,7 @@
 {
     "info": {
         "score" : 0,
-        "level" : 0
+        "level" : 0,
+        "max_combo": 0
     }
 }

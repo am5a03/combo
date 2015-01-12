@@ -4,6 +4,9 @@ package dnomyar.combo.utils;
  * Created by Raymond on 2015-01-10.
  */
 public class Constants {
+
+    public static final String CONFIG_FILE_PATH = "config.json";
+
     public static final int CAMERA_WIDTH = 1080;
     public static final int CAMERA_HEIGHT = 1920;
 

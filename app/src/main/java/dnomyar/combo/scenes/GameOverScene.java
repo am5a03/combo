@@ -13,6 +13,7 @@ import org.andengine.util.adt.align.HorizontalAlign;
 import dnomyar.combo.huds.ScoreText;
 import dnomyar.combo.managers.SceneManager;
 import dnomyar.combo.utils.ColorUtils;
+import dnomyar.combo.utils.JsonHelper;
 
 /**
  * Created by Raymond on 2015-01-11.
@@ -71,7 +72,7 @@ public class GameOverScene extends BaseScene implements MenuScene.IOnMenuItemCli
     private void createMenuChildScene() {
         menuChildScene = new MenuScene(camera);
         menuChildScene.setScale(1.0f);
-
+        JsonHelper.getConfig(activity);
         final IMenuItem playAgainMenuItem = new ScaleMenuItemDecorator(new TextMenuItem(MENU_PLAY_AGAIN, resourcesManager.mFont, "PLAY AGAIN", vbom), 1.2f, 1);
         final IMenuItem goBackToMainMenuItem = new ScaleMenuItemDecorator(new TextMenuItem(MENU_GO_TO_MAIN_MENU, resourcesManager.mFont, "BACK TO MAIN", vbom), 1.2f, 1);
         this.scoreText = new ScoreText(CAMERA_CENTER_POS_X, CAMERA_HEIGHT - 120, resourcesManager.mFont, "Final Score\n 0123456789", new TextOptions(HorizontalAlign.CENTER), vbom);
