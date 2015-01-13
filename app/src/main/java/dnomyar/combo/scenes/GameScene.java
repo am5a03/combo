@@ -1,19 +1,13 @@
 package dnomyar.combo.scenes;
 
-import android.graphics.Color;
 import android.util.Log;
 
 import org.andengine.engine.camera.hud.HUD;
 import org.andengine.engine.handler.timer.ITimerCallback;
 import org.andengine.engine.handler.timer.TimerHandler;
-import org.andengine.entity.primitive.Rectangle;
-import org.andengine.entity.scene.ITouchArea;
-import org.andengine.entity.scene.Scene;
 import org.andengine.entity.scene.background.Background;
-import org.andengine.entity.text.Text;
 import org.andengine.entity.text.TextOptions;
 import org.andengine.util.adt.align.HorizontalAlign;
-import org.andengine.util.adt.list.SmartList;
 
 import dnomyar.combo.huds.ComboText;
 import dnomyar.combo.huds.Control;
@@ -25,7 +19,6 @@ import dnomyar.combo.listeners.IGameBoardStateListener;
 import dnomyar.combo.managers.SceneManager;
 import dnomyar.combo.managers.SceneManager.SceneType;
 import dnomyar.combo.utils.ColorUtils;
-import dnomyar.combo.utils.Constants;
 
 /**
  * Created by Raymond on 2015-01-04.
@@ -34,10 +27,11 @@ public class GameScene extends BaseScene implements IGameBoardStateListener {
 
     private static final int START_LEVEL = 1;
     private static final int MAX_LEVEL = 140;
-    private static final int PENALTY_TIME = 3;
-    private static final int BASE_BONUS_TIME = 2;
-    private static final float DEFAULT_GAME_TIME = 60f;
-    private static final float START_TIME = 30f;
+    private static final int PENALTY_TIME = 3000;
+    private static final int BASE_BONUS_TIME = 2000;
+    private static final float DEFAULT_GAME_TIME = 60000f;
+    private static final float START_TIME = 30000f;
+    private static final long END_TIME = 30000; //End after 30000 ms
 
     private HUD gameHUD;
     private ScoreText scoreText;
@@ -46,7 +40,7 @@ public class GameScene extends BaseScene implements IGameBoardStateListener {
     private ProgressBar progressBar;
 
     private int level;
-    private float globalTime = START_TIME; //Set to 1 min
+    private long baseFinishTime;
     private int comboCount = 0;
     private long score = 0;
     private int currentScore = 0;
@@ -57,7 +51,7 @@ public class GameScene extends BaseScene implements IGameBoardStateListener {
         createHUD();
         this.level = START_LEVEL;
         this.score = 0;
-        this.globalTime = START_TIME;
+        this.baseFinishTime = System.currentTimeMillis() + END_TIME;
         this.createGameBoard(this.level);
         this.registerUpdateHandler();
     }
@@ -98,7 +92,7 @@ public class GameScene extends BaseScene implements IGameBoardStateListener {
         gameHUD.attachChild(progressBar);
         gameHUD.attachChild(comboText);
 
-        progressBar.setProgress(START_TIME/DEFAULT_GAME_TIME);
+        progressBar.setProgress(END_TIME/DEFAULT_GAME_TIME);
 
 
         for (RectangleButton rb : control.getButtons()) {
@@ -121,17 +115,12 @@ public class GameScene extends BaseScene implements IGameBoardStateListener {
     }
 
     private void registerUpdateHandler() {
-
-        this.registerUpdateHandler(new TimerHandler(1f, true, new ITimerCallback() {
+        this.registerUpdateHandler(new TimerHandler(0.01f, true, new ITimerCallback() {
             @Override
             public void onTimePassed(TimerHandler pTimerHandler) {
-                globalTime--;
-                Log.d("Time", globalTime/DEFAULT_GAME_TIME + "...");
-                Log.d("Time", globalTime + "...");
-                Log.d("Width", GameScene.this.progressBar.getWidth() + "...");
-                GameScene.this.progressBar.setProgress(globalTime/DEFAULT_GAME_TIME);
-
-                if(globalTime <= 0){
+                long currentTime = System.currentTimeMillis();
+                GameScene.this.progressBar.setProgress((baseFinishTime - currentTime)/DEFAULT_GAME_TIME);
+                if (currentTime >= baseFinishTime) {
                     GameScene.this.progressBar.setProgress(0);
                     GameScene.this.unregisterUpdateHandler(pTimerHandler);
                     GameScene.this.gameOver();
@@ -144,7 +133,8 @@ public class GameScene extends BaseScene implements IGameBoardStateListener {
 
     @Override
     public void onWon() {
-        if (this.globalTime <= 0) {
+        long currentTime = System.currentTimeMillis();
+        if (currentTime >= baseFinishTime) {
             return;
         }
         this.level = Math.min(++this.level, MAX_LEVEL);
@@ -155,8 +145,8 @@ public class GameScene extends BaseScene implements IGameBoardStateListener {
         this.scoreText.setScore(this.score);
         this.currentScore = 0;
         Log.d("GameScene", "Won");
-        if (this.globalTime <= DEFAULT_GAME_TIME) {
-            this.globalTime += BASE_BONUS_TIME;
+        if ((baseFinishTime - currentTime) <= DEFAULT_GAME_TIME) {
+            baseFinishTime += BASE_BONUS_TIME;
         }
 
         this.comboCount++;
@@ -166,7 +156,8 @@ public class GameScene extends BaseScene implements IGameBoardStateListener {
 
     @Override
     public void onMiss() {
-        if (this.globalTime <= 0) {
+        long currentTime = System.currentTimeMillis();
+        if (currentTime >= baseFinishTime) {
             return;
         }
         Log.d("GameScene", "Miss");
@@ -174,14 +165,15 @@ public class GameScene extends BaseScene implements IGameBoardStateListener {
         this.createGameBoard(this.level);
         this.comboCount = 0;
         this.currentScore = 0;
-        this.globalTime -= PENALTY_TIME;
+        this.baseFinishTime -= PENALTY_TIME;
         this.comboText.reset();
-        this.progressBar.setProgress(this.globalTime/DEFAULT_GAME_TIME);
+        this.progressBar.setProgress((baseFinishTime - currentTime)/DEFAULT_GAME_TIME);
     }
 
     @Override
     public void onHit() {
-        if (this.globalTime <= 0) {
+        long currentTime = System.currentTimeMillis();
+        if (currentTime >= baseFinishTime) {
             return;
         }
         Log.d("GameScene", "Hit");
@@ -199,6 +191,11 @@ public class GameScene extends BaseScene implements IGameBoardStateListener {
         this.gameHUD.clearTouchAreas();
         SceneManager.getInstance().createGameOverScene(this.score);
 
+    }
+
+    private long getEstFinishTime() {
+        long currentTime = System.currentTimeMillis();
+        return (baseFinishTime - currentTime);
     }
 
 }
