@@ -8,6 +8,10 @@ import org.andengine.opengl.shader.ShaderProgram;
 import org.andengine.opengl.vbo.DrawType;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
+import java.util.Random;
+
+import dnomyar.combo.utils.Constants;
+
 /**
  * Created by Raymond on 2015-01-05.
  */
@@ -32,4 +36,5 @@ public class ScoreText extends Text {
     public void init() {
         this.setText("Score: " + score);
     }
+
 }

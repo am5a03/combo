@@ -72,7 +72,7 @@ public class ResourcesManager {
     {
         /* Load Font/Textures. */
         FontFactory.setAssetBasePath("gfx/fonts/");
-        this.mFontTextureAtlas = new BitmapTextureAtlas(activity.getTextureManager(), 256, 256, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
+        this.mFontTextureAtlas = new BitmapTextureAtlas(activity.getTextureManager(), 512, 512, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
         this.mFont = FontFactory.createFromAsset(activity.getFontManager(), this.mFontTextureAtlas, activity.getAssets(), "manteka.ttf", Constants.TEXT_SIZE_NORMAL, true, Color.WHITE);
 //        this.mSmallerFont = FontFactory.createFromAsset(activity.getFontManager(), this.mFontTextureAtlas, activity.getAssets(), "manteka.ttf", Constants.TEXT_SIZE_NORMAL, true, Color.WHITE);
 //        activity.getTextureManager().loadTexture(this.mFontTextureAtlas);

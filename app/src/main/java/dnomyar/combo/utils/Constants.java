@@ -24,14 +24,17 @@ public class Constants {
 
     public static class GameOverMessage {
         public static final String LMAO = "LMAO";
+        public static final String AWWW = "Awww";
         public static final String HOW_SAD = "How sad";
         public static final String YOU_AWAKE = "You awake?";
         public static final String WORK_HARDER = "Work harder!";
         public static final String OK = "OK";
         public static final String BRILLIANT = "Brilliant!";
+        public static final String SO_CLOSE = "So close";
         public static final String AWESOME = "Awesome!";
         public static final String NOT_BAD = "Not bad";
         public static final String GOD_LIKE = "God like";
+        public static final String YOU_MAD = "You mad?";
         public static final String WICKED_SICK = "Wicked sick";
         public static final String LIKE_A_BOSS = "Like a boss";
     }

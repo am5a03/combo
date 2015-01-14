@@ -58,7 +58,7 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
         Log.d("sss",  "Center Y: " + camera.getCenterY());
 
         menuChildScene.setPosition(camera.getCenterX(), camera.getCenterY());
-        final IMenuItem playMenuItem = new ScaleMenuItemDecorator(new TextMenuItem(MENU_PLAY, resourcesManager.mFont, "PLAY", vbom), 1.2f, 1);
+        final IMenuItem playMenuItem = new ScaleMenuItemDecorator(new TextMenuItem(MENU_PLAY, resourcesManager.mFont, "PLAY", vbom), 2.2f, 2.0f);
         Text title = new Text(0, CAMERA_CENTER_POS_Y - 120, resourcesManager.mFont, "Combo", new TextOptions(HorizontalAlign.CENTER), vbom);
         title.setScale(2.0f);
         menuChildScene.attachChild(title);
