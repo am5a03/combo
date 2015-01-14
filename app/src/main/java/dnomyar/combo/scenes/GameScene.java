@@ -91,7 +91,7 @@ public class GameScene extends BaseScene implements IGameBoardStateListener {
         scoreText = new ScoreText(CAMERA_CENTER_POS_X/2, CAMERA_HEIGHT - 100, resourcesManager.mFont, "Score: 0123456789", new TextOptions(HorizontalAlign.LEFT), vbom);
         comboText = new ComboText(CAMERA_CENTER_POS_X, CAMERA_HEIGHT - 180, resourcesManager.mFont, "x1234567890", new TextOptions(HorizontalAlign.RIGHT), vbom);
         comboText.setText("");
-        control = new Control(CAMERA_CENTER_POS_X/2, CAMERA_CENTER_POS_Y/6, CAMERA_WIDTH, CAMERA_HEIGHT, vbom);
+        control = new Control(CAMERA_CENTER_POS_X/2, CAMERA_CENTER_POS_Y/8, CAMERA_WIDTH, CAMERA_HEIGHT, vbom);
         progressBar = new ProgressBar(CAMERA_CENTER_WIDTH, CAMERA_HEIGHT, CAMERA_WIDTH, 50, vbom);
         comboProgressBar = new ProgressBar(CAMERA_CENTER_WIDTH, CAMERA_HEIGHT - 30, CAMERA_WIDTH/2, 10, vbom);
 

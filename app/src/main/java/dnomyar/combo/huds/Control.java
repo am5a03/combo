@@ -1,14 +1,7 @@
 package dnomyar.combo.huds;
 
-import android.util.Log;
-
 import org.andengine.entity.Entity;
-import org.andengine.entity.primitive.Rectangle;
-import org.andengine.entity.scene.IOnAreaTouchListener;
-import org.andengine.entity.scene.ITouchArea;
-import org.andengine.input.touch.TouchEvent;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
-import org.andengine.util.adt.color.Color;
 
 import dnomyar.combo.listeners.IButtonTouchListener;
 import dnomyar.combo.models.ComboColor;
@@ -23,7 +16,7 @@ public class Control extends Entity {
     private float mCameraWidth;
     private float mCameraHeight;
 
-    private final static int NUM_OF_BTNS = 4;
+    private final static int NUM_OF_BTNS = 7;
 
     public Control(float pX, float pY, float cameraWidth, float cameraHeight, VertexBufferObjectManager vbom) {
         super(pX, pY);
@@ -35,21 +28,33 @@ public class Control extends Entity {
 
     private void initButtons(VertexBufferObjectManager vbom) {
         this.buttons = new RectangleButton[NUM_OF_BTNS];
-        buttons[0] = new RectangleButton(0, 0, this.mCameraWidth/2, this.mCameraHeight/6, vbom, ComboColor.GREEN);
-//        rgb(76, 175, 80) GREEN
+        float upperRectangleWidth = this.mCameraWidth/3f;
+        float lowerRectangleWidth = this.mCameraWidth/4;
+        float rectangleHeight = this.mCameraHeight/8;
+
+        buttons[0] = new RectangleButton(-lowerRectangleWidth/2, 0, lowerRectangleWidth, rectangleHeight, vbom, ComboColor.GREEN);
         buttons[0].setColor(ColorUtils.getDefaultGreen()); //TODO
 
-        buttons[1] = new RectangleButton(this.mCameraWidth/2, 0, this.mCameraWidth/2, this.mCameraHeight/6, vbom, ComboColor.YELLOW);
-//      rgb(255, 235, 59) YELLOW
-        buttons[1].setColor(ColorUtils.getDefaultYellow()); //TODO
+        buttons[1] = new RectangleButton(-lowerRectangleWidth/2 + lowerRectangleWidth, 0, lowerRectangleWidth, rectangleHeight, vbom, ComboColor.BLUE);
+        buttons[1].setColor(ColorUtils.getDefaultBlue()); //TODO
 
-        buttons[2] = new RectangleButton(0, this.mCameraHeight/6, this.mCameraWidth/2, this.mCameraHeight/6, vbom, ComboColor.RED);
-//      rgb(244, 67, 54) RED
-        buttons[2].setColor(ColorUtils.getDefaultRed()); //TODO
+        buttons[2] = new RectangleButton(-lowerRectangleWidth/2 + lowerRectangleWidth * 2, 0, lowerRectangleWidth, rectangleHeight, vbom, ComboColor.INDIGO);
+        buttons[2].setColor(ColorUtils.getDefaultIndigo()); //TODO
 
-        buttons[3] = new RectangleButton(this.mCameraWidth/2, this.mCameraHeight/6, this.mCameraWidth/2, this.mCameraHeight/6, vbom, ComboColor.BLUE);
-//      rgb(33, 150, 243) BLUE
-        buttons[3].setColor(ColorUtils.getDefaultBlue()); //TODO
+        buttons[3] = new RectangleButton(-lowerRectangleWidth/2 + lowerRectangleWidth * 3, 0, lowerRectangleWidth, rectangleHeight, vbom, ComboColor.PURPLE);
+        buttons[3].setColor(ColorUtils.getDefaultPurple()); //TODO
+
+
+
+        buttons[4] = new RectangleButton(-upperRectangleWidth/4, rectangleHeight, upperRectangleWidth, rectangleHeight, vbom, ComboColor.RED);
+        buttons[4].setColor(ColorUtils.getDefaultRed());
+
+        buttons[5] = new RectangleButton(-upperRectangleWidth/4 + upperRectangleWidth, rectangleHeight, upperRectangleWidth, rectangleHeight, vbom, ComboColor.ORANGE);
+        buttons[5].setColor(ColorUtils.getDefaultOrange());
+
+        buttons[6] = new RectangleButton(-upperRectangleWidth/4 + upperRectangleWidth * 2, rectangleHeight, upperRectangleWidth, rectangleHeight, vbom, ComboColor.YELLOW);
+        buttons[6].setColor(ColorUtils.getDefaultYellow());
+
 
         for (RectangleButton button : buttons) {
             this.attachChild(button);

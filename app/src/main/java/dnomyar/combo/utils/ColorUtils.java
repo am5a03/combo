@@ -43,19 +43,19 @@ public class ColorUtils {
     }
 
     public static Color getDefaultOrange() {
-        return null;
+        return new Color(ColorUtils.getColorFloat(255), ColorUtils.getColorFloat(183), ColorUtils.getColorFloat(77));
     }
 
     public static Color getPressedOrange() {
-        return null;
+        return new Color(ColorUtils.getColorFloat(255), ColorUtils.getColorFloat(224), ColorUtils.getColorFloat(178));
     }
 
     public static Color getDefaultYellow() {
-        return new Color(ColorUtils.getColorFloat(255), ColorUtils.getColorFloat(213), ColorUtils.getColorFloat(79));
+        return new Color(ColorUtils.getColorFloat(255), ColorUtils.getColorFloat(241), ColorUtils.getColorFloat(118));
     }
 
     public static Color getPressedYellow() {
-        return new Color(ColorUtils.getColorFloat(255), ColorUtils.getColorFloat(236), ColorUtils.getColorFloat(179));
+        return new Color(ColorUtils.getColorFloat(255), ColorUtils.getColorFloat(249), ColorUtils.getColorFloat(196));
     }
 
     public static Color getDefaultGreen() {
@@ -75,19 +75,19 @@ public class ColorUtils {
     }
 
     public static Color getDefaultIndigo() {
-        return null;
+        return new Color(ColorUtils.getColorFloat(121), ColorUtils.getColorFloat(134), ColorUtils.getColorFloat(203));
     }
 
     public static Color getPressedIndigo() {
-        return null;
+        return new Color(ColorUtils.getColorFloat(197), ColorUtils.getColorFloat(202), ColorUtils.getColorFloat(233));
     }
 
-    public static Color getDefaultPurlple() {
-        return null;
+    public static Color getDefaultPurple() {
+        return new Color(ColorUtils.getColorFloat(186), ColorUtils.getColorFloat(104), ColorUtils.getColorFloat(200));
     }
 
     public static Color getPressedPurple() {
-        return null;
+        return new Color(ColorUtils.getColorFloat(225), ColorUtils.getColorFloat(190), ColorUtils.getColorFloat(231));
     }
 
     public static Color getDefaultBg() {
