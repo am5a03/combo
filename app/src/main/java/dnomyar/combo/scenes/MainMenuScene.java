@@ -48,7 +48,7 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
     }
 
     private void createBackgroud() {
-        setBackground(new Background(ColorUtils.getDefaultGrey()));
+        setBackground(new Background(ColorUtils.getDefaultBg()));
     }
 
     private void createMenuChildScene() {

@@ -42,7 +42,7 @@ public class GameOverScene extends BaseScene implements MenuScene.IOnMenuItemCli
 
     @Override
     public void createScene() {
-        setBackground(new Background(ColorUtils.getDefaultGrey()));
+        setBackground(new Background(ColorUtils.getDefaultBg()));
         createMenuChildScene();
     }
 
