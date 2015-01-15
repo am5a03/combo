@@ -18,6 +18,7 @@ import dnomyar.combo.huds.ScoreText;
 import dnomyar.combo.listeners.IGameBoardStateListener;
 import dnomyar.combo.managers.SceneManager;
 import dnomyar.combo.managers.SceneManager.SceneType;
+import dnomyar.combo.models.Stat;
 import dnomyar.combo.utils.ColorUtils;
 
 /**
@@ -51,6 +52,7 @@ public class GameScene extends BaseScene implements IGameBoardStateListener {
     private int comboCount = 0;
     private long score = 0;
     private int currentScore = 0;
+    private long maxCombo = 0;
 
     @Override
     public void createScene() {
@@ -126,6 +128,7 @@ public class GameScene extends BaseScene implements IGameBoardStateListener {
     }
 
     private void registerUpdateHandler() {
+
         this.registerUpdateHandler(new TimerHandler(0.01f, true, new ITimerCallback() {
             @Override
             public void onTimePassed(TimerHandler pTimerHandler) {
@@ -136,6 +139,7 @@ public class GameScene extends BaseScene implements IGameBoardStateListener {
 
                 GameScene.this.progressBar.setProgress(diffInGameTime/DEFAULT_GAME_TIME);
                 GameScene.this.comboProgressBar.setProgress(diffInComboTime/DEFAULT_COMBO_TIME);
+
 
                 if (currentTime >= estComboFinishTime) {
                     GameScene.this.resetComob();
@@ -214,6 +218,9 @@ public class GameScene extends BaseScene implements IGameBoardStateListener {
         } else {
             this.estComboFinishTime += BASE_COMBO_BONUS_TIME; // Extending the combo time
         }
+        if (this.comboCount > maxCombo) {
+            this.maxCombo = this.comboCount;
+        }
     }
 
     protected void gameOver() {
@@ -222,7 +229,12 @@ public class GameScene extends BaseScene implements IGameBoardStateListener {
         this.scoreText.setScore(this.score);
         this.gameHUD.clearTouchAreas();
         this.resetComob();
-        SceneManager.getInstance().createGameOverScene(this.score);
+
+        Stat stat = new Stat();
+        stat.setScore(this.score);
+        stat.setLevel(this.level);
+        stat.setCombo(this.maxCombo);
+        SceneManager.getInstance().createGameOverScene(stat);
     }
 
     private void resetComob() {

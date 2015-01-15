@@ -4,6 +4,7 @@ import android.util.Log;
 
 import org.andengine.engine.handler.timer.ITimerCallback;
 import org.andengine.engine.handler.timer.TimerHandler;
+import org.andengine.entity.modifier.MoveXModifier;
 import org.andengine.entity.scene.IOnSceneTouchListener;
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.scene.background.Background;
@@ -21,6 +22,7 @@ import java.util.Random;
 import dnomyar.combo.huds.ScoreText;
 import dnomyar.combo.managers.SceneManager;
 import dnomyar.combo.models.Config;
+import dnomyar.combo.models.Stat;
 import dnomyar.combo.utils.ColorUtils;
 import dnomyar.combo.utils.Constants;
 import dnomyar.combo.utils.JsonHelper;
@@ -30,7 +32,7 @@ import dnomyar.combo.utils.JsonHelper;
  */
 public class GameOverScene extends BaseScene implements MenuScene.IOnMenuItemClickListener, IOnSceneTouchListener {
 
-    private long score;
+    private Stat stat;
     private long scoreCount; //For creating incremental score effect;
     private ScoreText scoreText;
     private Text gradingText;
@@ -42,7 +44,7 @@ public class GameOverScene extends BaseScene implements MenuScene.IOnMenuItemCli
 
     @Override
     public void createScene() {
-        setBackground(new Background(ColorUtils.getDefaultBg()));
+        createBackgroud();
         createMenuChildScene();
     }
 
@@ -61,19 +63,27 @@ public class GameOverScene extends BaseScene implements MenuScene.IOnMenuItemCli
 
     }
 
+    private void createBackgroud() {
+        setBackground(new Background(ColorUtils.getDefaultBg()));
+    }
+
     /**
      *
-     * @param score
+     * @param stat
      */
-    public void setScore(final long score) {
-        this.score = score;
+    public void setStat(final Stat stat) {
+        this.stat = stat;
+        compareStat();
         this.registerUpdateHandler(new TimerHandler(0.001f, true, new ITimerCallback() {
 
             @Override
             public void onTimePassed(TimerHandler pTimerHandler) {
-                if (GameOverScene.this.scoreCount == score) {
+                if (GameOverScene.this.scoreCount == stat.getScore()) {
                     GameOverScene.this.scoreText.setText("Final Score\n" + GameOverScene.this.scoreCount);
+
                     GameOverScene.this.gradingText.setText(GameOverScene.this.getGradingText());
+                    GameOverScene.this.gradingText.setColor(ColorUtils.getRandomColor());
+
                     GameOverScene.this.unregisterUpdateHandler(pTimerHandler);
                 } else {
                     GameOverScene.this.scoreText.setText("Final Score\n" + ++GameOverScene.this.scoreCount);
@@ -87,32 +97,29 @@ public class GameOverScene extends BaseScene implements MenuScene.IOnMenuItemCli
         this.setOnSceneTouchListener(this);
         menuChildScene = new MenuScene(camera);
         menuChildScene.setScale(1.0f);
-        Config c = JsonHelper.getConfig(activity);
 
+        menuChildScene.setPosition(camera.getCenterX(), camera.getCenterY());
+        final IMenuItem playAgainMenuItem = new ScaleMenuItemDecorator(new TextMenuItem(MENU_PLAY_AGAIN, resourcesManager.mFont, "PLAY AGAIN", vbom), 1.5f, 1.3f);
+        final IMenuItem goBackToMainMenuItem = new ScaleMenuItemDecorator(new TextMenuItem(MENU_GO_TO_MAIN_MENU, resourcesManager.mFont, "BACK TO MAIN", vbom), 1.5f, 1.3f);
+        this.scoreText = new ScoreText(0, CAMERA_CENTER_POS_Y - 120, resourcesManager.mFont, "Final Score\n 0123456789", new TextOptions(HorizontalAlign.CENTER), vbom);
+        this.gradingText = new Text(0, CAMERA_CENTER_POS_Y - 350, resourcesManager.mFont, "abcdefghijklmnopqrstuvwxyz?!.", new TextOptions(HorizontalAlign.CENTER), vbom);
 
-
-        final IMenuItem playAgainMenuItem = new ScaleMenuItemDecorator(new TextMenuItem(MENU_PLAY_AGAIN, resourcesManager.mFont, "PLAY AGAIN", vbom), 1.2f, 1);
-        final IMenuItem goBackToMainMenuItem = new ScaleMenuItemDecorator(new TextMenuItem(MENU_GO_TO_MAIN_MENU, resourcesManager.mFont, "BACK TO MAIN", vbom), 1.2f, 1);
-        this.scoreText = new ScoreText(CAMERA_CENTER_POS_X, CAMERA_HEIGHT - 120, resourcesManager.mFont, "Final Score\n 0123456789", new TextOptions(HorizontalAlign.CENTER), vbom);
-        this.gradingText = new Text(CAMERA_CENTER_POS_X, CAMERA_HEIGHT - 350, resourcesManager.mFont, "abcdefghijklmnopqrstuvwxyz?!.", new TextOptions(HorizontalAlign.CENTER), vbom);
         this.scoreText.setScale(2.0f);
         this.gradingText.setScale(1.3f);
         this.gradingText.setText("");
 
         menuChildScene.addMenuItem(playAgainMenuItem);
         menuChildScene.addMenuItem(goBackToMainMenuItem);
-        menuChildScene.setBackgroundEnabled(false);
-        menuChildScene.setAlpha(100);
-
         menuChildScene.attachChild(this.scoreText);
         menuChildScene.attachChild(this.gradingText);
 
-        // Child element, place it at center
-        playAgainMenuItem.setPosition(0,0);
-        goBackToMainMenuItem.setPosition(0, -30);
-
-
         menuChildScene.buildAnimations();
+        menuChildScene.setBackgroundEnabled(false);
+
+        // Child element, place it at center
+        playAgainMenuItem.setPosition(0, 0);
+        goBackToMainMenuItem.setPosition(0, -100);
+
         menuChildScene.setOnMenuItemClickListener(this);
         setChildScene(menuChildScene);
 
@@ -133,6 +140,28 @@ public class GameOverScene extends BaseScene implements MenuScene.IOnMenuItemCli
         }
     }
 
+    private void compareStat() {
+        Config c = JsonHelper.getConfig(activity);
+
+        long score = c.getInfo().getScore();
+        long maxCombo = c.getInfo().getMaxCombo();
+        long level = c.getInfo().getLevel();
+
+        if (stat.getScore() > score) {
+            c.getInfo().setScore(stat.getScore());
+        }
+
+        if (stat.getCombo() > maxCombo) {
+            c.getInfo().setMaxCombo(stat.getCombo());
+        }
+
+        if (stat.getLevel() > level) {
+            c.getInfo().setLevel(stat.getLevel());
+        }
+
+        JsonHelper.setConfig(activity, c);
+    }
+
     private String getGradingText() {
         String[] low = {
                 Constants.GameOverMessage.YOU_AWAKE,
@@ -140,7 +169,7 @@ public class GameOverScene extends BaseScene implements MenuScene.IOnMenuItemCli
         };
 
         String[] midLow = {
-                Constants.GameOverMessage.OK,
+                Constants.GameOverMessage.GOOD_JOB,
                 Constants.GameOverMessage.WORK_HARDER,
         };
 
@@ -164,19 +193,20 @@ public class GameOverScene extends BaseScene implements MenuScene.IOnMenuItemCli
                 Constants.GameOverMessage.YOU_MAD
         };
 
+        long score = stat.getScore();
         Random r = new Random(System.currentTimeMillis());
         int idx = r.nextInt(2);
-        if (this.score > 0 && this.score <= 200) {
+        if (score > 0 && score <= 200) {
             return low[idx];
-        } else if (this.score > 200 && this.score <= 800) {
+        } else if (score > 200 && score <= 800) {
             return midLow[idx];
-        } else if (this.score > 800 && this.score <= 1500) {
+        } else if (score > 800 && score <= 1500) {
             return mid[idx];
-        } else if (this.score > 1500 && this.score <= 3500) {
+        } else if (score > 1500 && score <= 3500) {
             return midHigh[idx];
-        } else if (this.score > 3500 && this.score <= 7000) {
+        } else if (score > 3500 && score <= 7000) {
             return high[idx];
-        } else if (this.score > 8000) {
+        } else if (score > 8000) {
             return veryHigh[idx];
         } else {
             return "";
@@ -187,7 +217,7 @@ public class GameOverScene extends BaseScene implements MenuScene.IOnMenuItemCli
     @Override
     public boolean onSceneTouchEvent(Scene pScene, TouchEvent pSceneTouchEvent) {
         if (pSceneTouchEvent.isActionDown()) {
-            this.scoreCount = this.score;
+            this.scoreCount = stat.getScore();
         }
         return false;
     }

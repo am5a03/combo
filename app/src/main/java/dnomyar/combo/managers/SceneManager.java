@@ -5,6 +5,7 @@ import org.andengine.engine.handler.timer.ITimerCallback;
 import org.andengine.engine.handler.timer.TimerHandler;
 import org.andengine.ui.IGameInterface.OnCreateSceneCallback;
 
+import dnomyar.combo.models.Stat;
 import dnomyar.combo.scenes.BaseScene;
 import dnomyar.combo.scenes.GameOverScene;
 import dnomyar.combo.scenes.GameScene;
@@ -124,9 +125,9 @@ public class SceneManager {
         disposeSplashScene();
     }
 
-    public void createGameOverScene(long score) {
+    public void createGameOverScene(Stat stat) {
         gameOverScene = new GameOverScene();
-        gameOverScene.setScore(score);
+        gameOverScene.setStat(stat);
         SceneManager.getInstance().setScene(gameOverScene);
 
         gameScene.disposeScene();

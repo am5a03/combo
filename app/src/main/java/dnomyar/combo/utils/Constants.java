@@ -28,7 +28,7 @@ public class Constants {
         public static final String HOW_SAD = "How sad";
         public static final String YOU_AWAKE = "You awake?";
         public static final String WORK_HARDER = "Work harder!";
-        public static final String OK = "OK";
+        public static final String GOOD_JOB = "Good Job";
         public static final String BRILLIANT = "Brilliant!";
         public static final String SO_CLOSE = "So close";
         public static final String AWESOME = "Awesome!";

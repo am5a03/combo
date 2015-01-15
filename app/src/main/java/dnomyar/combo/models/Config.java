@@ -18,32 +18,32 @@ public class Config {
 
 
     public class Info {
-        private int score;
-        private int level;
-        private int maxCombo;
+        private long score;
+        private long level;
+        private long maxCombo;
 
 
-        public int getScore() {
+        public long getScore() {
             return score;
         }
 
-        public int getLevel() {
+        public long getLevel() {
             return level;
         }
 
-        public int getMaxCombo() {
+        public long getMaxCombo() {
             return maxCombo;
         }
 
-        public void setScore(int score) {
+        public void setScore(long score) {
             this.score = score;
         }
 
-        public void setLevel(int level) {
+        public void setLevel(long level) {
             this.level = level;
         }
 
-        public void setMaxCombo(int maxCombo) {
+        public void setMaxCombo(long maxCombo) {
             this.maxCombo = maxCombo;
         }
     }

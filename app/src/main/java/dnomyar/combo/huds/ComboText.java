@@ -2,6 +2,8 @@ package dnomyar.combo.huds;
 
 import android.graphics.Color;
 
+import org.andengine.entity.modifier.ScaleModifier;
+import org.andengine.entity.modifier.SequenceEntityModifier;
 import org.andengine.entity.text.Text;
 import org.andengine.entity.text.TextOptions;
 import org.andengine.entity.text.vbo.ITextVertexBufferObject;
@@ -31,20 +33,34 @@ public class ComboText extends Text {
 
         if (count <= 10) {
             this.setColor(Color.WHITE);
-            this.setScale(1.0f);
         } else if (count > 10 && count <= 30) {
             this.setColor(ColorUtils.getDefaultBlue());
-            this.setScale(1.2f);
         } else if (count > 30 && count <= 50) {
             this.setColor(ColorUtils.getDefaultGreen());
-            this.setScale(1.3f);
         } else if (count > 50 && count <= 100) {
             this.setColor(ColorUtils.getDefaultYellow());
-            this.setScale(1.6f);
         } else if (count > 100) {
             this.setColor(ColorUtils.getDefaultRed());
-            this.setScale(2.0f);
         }
+        this.registerEntityModifier(new SequenceEntityModifier(new ScaleModifier(0.1f, getScaleByCount(count), getScaleByCount(count) * 1.5f), new ScaleModifier(0.1f, getScaleByCount(count) * 1.5f, getScaleByCount(count))));
+    }
 
+    public float getScaleByCount(int count) {
+        if (count <= 10) {
+           return 1.0f;
+        } else if (count > 10 && count <= 30) {
+           return 1.2f;
+        } else if (count > 30 && count <= 50) {
+           return 1.3f;
+        } else if (count > 50 && count <= 100) {
+           return 1.6f;
+        } else if (count > 100) {
+            return 2.0f;
+        }
+        return 1.0f;
+    }
+
+    public void resetScaleByCount(int count) {
+        this.setScale(getScaleByCount(count));
     }
 }
