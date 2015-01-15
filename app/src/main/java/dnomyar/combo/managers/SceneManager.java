@@ -46,6 +46,7 @@ public class SceneManager {
         SCENE_GAME,
         SCENE_LOADING,
         SCENE_GAME_OVER,
+        SCENE_STAT
     }
 
     //---------------------------------------------
@@ -77,6 +78,9 @@ public class SceneManager {
                 break;
             case SCENE_GAME_OVER:
                 setScene(gameOverScene);
+            case SCENE_STAT:
+                setScene(menuScene);
+                break;
             default:
                 break;
         }
