@@ -60,7 +60,7 @@ public class GameOverScene extends BaseScene implements MenuScene.IOnMenuItemCli
 
     @Override
     public void disposeScene() {
-
+        this.dispose();
     }
 
     private void createBackgroud() {

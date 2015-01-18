@@ -12,6 +12,7 @@ import dnomyar.combo.scenes.GameScene;
 import dnomyar.combo.scenes.LoadingScene;
 import dnomyar.combo.scenes.MainMenuScene;
 import dnomyar.combo.scenes.SplashScene;
+import dnomyar.combo.scenes.StatScene;
 
 /**
  * Created by Raymond on 2015-01-04.
@@ -26,6 +27,7 @@ public class SceneManager {
     private BaseScene gameScene;
     private BaseScene loadingScene;
     private GameOverScene gameOverScene;
+    private StatScene statScene;
 
     //---------------------------------------------
     // VARIABLES
@@ -150,13 +152,21 @@ public class SceneManager {
         }));
     }
 
+    public void createStatScene(int createFrom, final Engine mEngine) {
+        statScene = new StatScene();
+        statScene.setSceneCreatedFrom(createFrom);
+        setScene(statScene);
+    }
+
     /**
      *
      * @param mEngine
      */
     public void loadMenuScene(final Engine mEngine) {
         setScene(loadingScene);
-        gameScene.disposeScene();
+        if (gameScene != null) {
+            gameScene.disposeScene();
+        }
         ResourcesManager.getInstance().unloadGameTextures();
         mEngine.registerUpdateHandler(new TimerHandler(0.1f, new ITimerCallback() {
             public void onTimePassed(final TimerHandler pTimerHandler)

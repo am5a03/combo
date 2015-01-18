@@ -60,7 +60,7 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
 
         menuChildScene.setPosition(camera.getCenterX(), camera.getCenterY());
         final IMenuItem playMenuItem = new ScaleMenuItemDecorator(new TextMenuItem(MENU_PLAY, resourcesManager.mFont, "PLAY", vbom), 2.2f, 2.0f);
-        final IMenuItem statMenuItem = new ScaleMenuItemDecorator(new TextMenuItem(MENU_PLAY, resourcesManager.mFont, "PLAY", vbom), 2.2f, 2.0f);
+        final IMenuItem statMenuItem = new ScaleMenuItemDecorator(new TextMenuItem(MENU_STATS, resourcesManager.mFont, "Stat", vbom), 1.7f, 1.5f);
         Text title = new Text(0, CAMERA_CENTER_POS_Y - 120, resourcesManager.mFont, "Tile Combo", new TextOptions(HorizontalAlign.CENTER), vbom);
         title.setScale(2.0f);
         menuChildScene.attachChild(title);
@@ -76,12 +76,14 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
         }
 
         menuChildScene.addMenuItem(playMenuItem);
+        menuChildScene.addMenuItem(statMenuItem);
 
         menuChildScene.buildAnimations();
         menuChildScene.setBackgroundEnabled(false);
 
         // Child element, place it at center
         playMenuItem.setPosition(0,0);
+        statMenuItem.setPosition(0, -150);
 
         menuChildScene.setOnMenuItemClickListener(this);
         setChildScene(menuChildScene);
@@ -96,6 +98,7 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
             case MENU_OPTIONS:
                 return true;
             case MENU_STATS:
+                SceneManager.getInstance().createStatScene(MENU_PLAY, engine);
                 return true;
             default:
                 return false;
