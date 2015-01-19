@@ -1,5 +1,7 @@
 package dnomyar.combo.scenes;
 
+import org.andengine.entity.modifier.ScaleModifier;
+import org.andengine.entity.modifier.SequenceEntityModifier;
 import org.andengine.entity.scene.background.Background;
 import org.andengine.entity.text.Text;
 import org.andengine.entity.text.TextOptions;
@@ -57,6 +59,14 @@ public class StatScene extends BaseScene {
         this.scoreText = new Text(CAMERA_CENTER_POS_X, CAMERA_CENTER_POS_Y + CAMERA_CENTER_POS_Y/2, resourcesManager.mFont, "High score " + score, new TextOptions(HorizontalAlign.CENTER), vbom);
         this.comboText = new Text(CAMERA_CENTER_POS_X, CAMERA_CENTER_POS_Y + CAMERA_CENTER_POS_Y/2 - 150, resourcesManager.mFont, "Max combo " + maxCombo, new TextOptions(HorizontalAlign.CENTER), vbom);
         this.levelText = new Text(CAMERA_CENTER_POS_X, CAMERA_CENTER_POS_Y + CAMERA_CENTER_POS_Y/2 - 300, resourcesManager.mFont, "Max level " + level, new TextOptions(HorizontalAlign.CENTER), vbom);
+
+        this.scoreText.setScale(8f);
+        this.comboText.setScale(8f);
+        this.levelText.setScale(8f);
+
+        this.scoreText.registerEntityModifier(new SequenceEntityModifier(new ScaleModifier(0.2f, 8, 1f)));
+        this.comboText.registerEntityModifier(new SequenceEntityModifier(new ScaleModifier(0.2f, 8, 1f)));
+        this.levelText.registerEntityModifier(new SequenceEntityModifier(new ScaleModifier(0.2f, 8, 1f)));
 
         this.attachChild(scoreText);
         this.attachChild(comboText);

@@ -2,6 +2,8 @@ package dnomyar.combo.scenes;
 
 import dnomyar.combo.managers.SceneManager;
 import dnomyar.combo.managers.SceneManager.SceneType;
+import dnomyar.combo.utils.ColorUtils;
+
 import org.andengine.entity.scene.background.Background;
 import org.andengine.entity.text.Text;
 import org.andengine.util.adt.color.Color;
@@ -12,8 +14,8 @@ import org.andengine.util.adt.color.Color;
 public class LoadingScene extends BaseScene {
     @Override
     public void createScene() {
-        setBackground(new Background(Color.WHITE));
-        attachChild(new Text(400, 240, resourcesManager.mFont, "Loading...", vbom));
+        setBackground(new Background(ColorUtils.getDefaultBg()));
+        attachChild(new Text(CAMERA_CENTER_POS_X, CAMERA_CENTER_POS_Y, resourcesManager.mFont, "Loading...", vbom));
     }
 
     @Override
@@ -28,6 +30,6 @@ public class LoadingScene extends BaseScene {
 
     @Override
     public void disposeScene() {
-
+        this.dispose();
     }
 }

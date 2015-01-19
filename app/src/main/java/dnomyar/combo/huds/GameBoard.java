@@ -13,6 +13,7 @@ import java.util.ArrayList;
 
 import dnomyar.combo.listeners.IButtonTouchListener;
 import dnomyar.combo.listeners.IGameBoardStateListener;
+import dnomyar.combo.managers.ResourcesManager;
 import dnomyar.combo.models.ComboBoard;
 import dnomyar.combo.models.ComboColor;
 import dnomyar.combo.utils.ColorUtils;
@@ -46,7 +47,7 @@ public class GameBoard extends Rectangle implements IButtonTouchListener {
         ComboColor[] comboColors = this.mComboBoard.getComboColors();
         int sWidth = Constants.SQUARE_SIZE;
         int sHeight = Constants.SQUARE_SIZE;
-        int xOffset = (int) (Constants.SQUARE_SIZE * 0.65);
+        int xOffset = (int) (Constants.SQUARE_SIZE * 0.7);
         int yStart = (int) (this.getHeight() - (Constants.SQUARE_SIZE * 0.833)); //Make sure the square is placed at center of the board
         int count = 0;
         for(ComboColor color : comboColors) {
@@ -61,11 +62,11 @@ public class GameBoard extends Rectangle implements IButtonTouchListener {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            xOffset += sWidth + 10;
+            xOffset += sWidth + 5;
             //Warp line
             if (count >= LINE_WARP_LIMIT && count % LINE_WARP_LIMIT == 0) {
                 yStart -= (sHeight + 10);
-                xOffset = (int) (Constants.SQUARE_SIZE * 0.65);
+                xOffset = (int) (Constants.SQUARE_SIZE * 0.7);
             }
             this.attachChild(r);
         }
@@ -75,7 +76,6 @@ public class GameBoard extends Rectangle implements IButtonTouchListener {
     public void onButtonTouched(ComboColor c) {
         this.mInputColors.add(c);
         this.mInputIndex = this.mInputColors.size() - 1;
-
 
         if (this.mComboBoard.isMissed(mInputColors, this.mInputIndex)) {
 //            Log.d("Board", " Missed " + c);

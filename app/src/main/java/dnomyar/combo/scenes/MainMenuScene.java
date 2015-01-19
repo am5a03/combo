@@ -15,6 +15,7 @@ import org.andengine.entity.text.TextOptions;
 import org.andengine.util.adt.align.HorizontalAlign;
 import org.andengine.util.adt.color.Color;
 
+import dnomyar.combo.managers.ResourcesManager;
 import dnomyar.combo.managers.SceneManager;
 import dnomyar.combo.utils.ColorUtils;
 import dnomyar.combo.utils.Constants;
@@ -60,18 +61,18 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
 
         menuChildScene.setPosition(camera.getCenterX(), camera.getCenterY());
         final IMenuItem playMenuItem = new ScaleMenuItemDecorator(new TextMenuItem(MENU_PLAY, resourcesManager.mFont, "PLAY", vbom), 2.2f, 2.0f);
-        final IMenuItem statMenuItem = new ScaleMenuItemDecorator(new TextMenuItem(MENU_STATS, resourcesManager.mFont, "Stat", vbom), 1.7f, 1.5f);
+        final IMenuItem statMenuItem = new ScaleMenuItemDecorator(new TextMenuItem(MENU_STATS, resourcesManager.mFont, "Stats", vbom), 2.2f, 2.0f);
         Text title = new Text(0, CAMERA_CENTER_POS_Y - 120, resourcesManager.mFont, "Tile Combo", new TextOptions(HorizontalAlign.CENTER), vbom);
         title.setScale(2.0f);
         menuChildScene.attachChild(title);
 
         int sWidth = Constants.SQUARE_SIZE;
         int sHeight = Constants.SQUARE_SIZE;
-        int xOffset = (int) (Constants.SQUARE_SIZE * 0.65);
+        int xOffset = (int) (Constants.SQUARE_SIZE * 0.7);
         for(int i = 0; i < 14; i++) {
             Rectangle r = new Rectangle(-CAMERA_CENTER_POS_X + xOffset, CAMERA_CENTER_POS_Y - 250, sWidth, sHeight, vbom);
             r.setColor(ColorUtils.getRandomColor());
-            xOffset += sWidth + 10;
+            xOffset += sWidth + 5;
             menuChildScene.attachChild(r);
         }
 

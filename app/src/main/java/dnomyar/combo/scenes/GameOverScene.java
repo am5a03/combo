@@ -5,6 +5,8 @@ import android.util.Log;
 import org.andengine.engine.handler.timer.ITimerCallback;
 import org.andengine.engine.handler.timer.TimerHandler;
 import org.andengine.entity.modifier.MoveXModifier;
+import org.andengine.entity.modifier.ScaleModifier;
+import org.andengine.entity.modifier.SequenceEntityModifier;
 import org.andengine.entity.scene.IOnSceneTouchListener;
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.scene.background.Background;
@@ -82,6 +84,8 @@ public class GameOverScene extends BaseScene implements MenuScene.IOnMenuItemCli
                     GameOverScene.this.scoreText.setText("Final Score\n" + GameOverScene.this.scoreCount);
 
                     GameOverScene.this.gradingText.setText(GameOverScene.this.getGradingText());
+                    GameOverScene.this.gradingText.setScale(8f);
+                    GameOverScene.this.gradingText.registerEntityModifier(new SequenceEntityModifier(new ScaleModifier(0.2f, 8, 2f)));
                     GameOverScene.this.gradingText.setColor(ColorUtils.getRandomColor());
 
                     GameOverScene.this.unregisterUpdateHandler(pTimerHandler);
@@ -196,15 +200,15 @@ public class GameOverScene extends BaseScene implements MenuScene.IOnMenuItemCli
         long score = stat.getScore();
         Random r = new Random(System.currentTimeMillis());
         int idx = r.nextInt(2);
-        if (score > 0 && score <= 200) {
+        if (score > 0 && score <= 1000) {
             return low[idx];
-        } else if (score > 200 && score <= 800) {
+        } else if (score > 1000 && score <= 2000) {
             return midLow[idx];
-        } else if (score > 800 && score <= 1500) {
+        } else if (score > 2000 && score <= 3200) {
             return mid[idx];
-        } else if (score > 1500 && score <= 3500) {
+        } else if (score > 3200 && score <= 4200) {
             return midHigh[idx];
-        } else if (score > 3500 && score <= 7000) {
+        } else if (score > 4200 && score <= 8000) {
             return high[idx];
         } else if (score > 8000) {
             return veryHigh[idx];

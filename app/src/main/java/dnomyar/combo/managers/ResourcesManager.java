@@ -3,6 +3,10 @@ package dnomyar.combo.managers;
 import android.content.res.AssetManager;
 import android.graphics.Color;
 
+import org.andengine.audio.music.Music;
+import org.andengine.audio.music.MusicFactory;
+import org.andengine.audio.sound.Sound;
+import org.andengine.audio.sound.SoundFactory;
 import org.andengine.engine.Engine;
 import org.andengine.engine.camera.Camera;
 import org.andengine.opengl.font.Font;
@@ -43,6 +47,8 @@ public class ResourcesManager {
     public Font mFont;
     public Font mSmallerFont;
     private TextureRegion mFaceTextureRegion;
+    public Sound mHitSound;
+    public Music mBgMusic;
 
 
     //---------------------------------------------
@@ -82,7 +88,14 @@ public class ResourcesManager {
 
     private void loadMenuAudio()
     {
-
+//        try {
+//            MusicFactory.setAssetBasePath("mfx/");
+//            mBgMusic = MusicFactory.createMusicFromAsset(engine.getMusicManager(), activity, "bg.ogg");
+//            mBgMusic.setLooping(true);
+//            mBgMusic.setVolume(1.0f);
+//        } catch (Exception e) {
+//
+//        }
     }
 
     private void loadGameGraphics()
@@ -97,7 +110,13 @@ public class ResourcesManager {
 
     private void loadGameAudio()
     {
-
+//        try {
+//            SoundFactory.setAssetBasePath("mfx/");
+//            mHitSound = SoundFactory.createSoundFromAsset(engine.getSoundManager(), activity, "hit.ogg");
+//            mHitSound.setVolume(1.0f);
+//        } catch (Exception e) {
+//
+//        }
     }
 
     public void loadSplashScreen()
