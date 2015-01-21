@@ -10,3 +10,5 @@
 /gradle.properties
 *.jks
 *.keystore
+/app/release_assests/
+manifest-merger-release-report.txt
