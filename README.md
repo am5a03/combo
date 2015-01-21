@@ -1,2 +1,2 @@
-# combo
+# Tile Combo
 Just a simple game
