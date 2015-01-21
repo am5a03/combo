@@ -35,6 +35,11 @@ public class SplashScene extends BaseScene {
     }
 
     @Override
+    public void onMenuKeyPressed() {
+
+    }
+
+    @Override
     public SceneType getSceneType() {
         return SceneType.SCENE_SPLASH;
     }

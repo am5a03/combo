@@ -1,5 +1,6 @@
 package dnomyar.combo.activities;
 
+import android.util.Log;
 import android.view.KeyEvent;
 
 import org.andengine.engine.Engine;
@@ -84,7 +85,12 @@ public class GameActivity extends BaseGameActivity {
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK){
             SceneManager.getInstance().getCurrentScene().onBackKeyPressed();
+            return true;
+        } else if (keyCode == KeyEvent.KEYCODE_MENU && event.getAction() == KeyEvent.ACTION_DOWN) {
+            SceneManager.getInstance().getCurrentScene().onMenuKeyPressed();
+            return true;
+        } else {
+            return super.onKeyDown(keyCode, event);
         }
-        return false;
     }
 }

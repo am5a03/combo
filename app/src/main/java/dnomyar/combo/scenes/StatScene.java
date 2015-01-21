@@ -35,6 +35,11 @@ public class StatScene extends BaseScene {
     }
 
     @Override
+    public void onMenuKeyPressed() {
+
+    }
+
+    @Override
     public SceneManager.SceneType getSceneType() {
         return SceneManager.SceneType.SCENE_STAT;
     }

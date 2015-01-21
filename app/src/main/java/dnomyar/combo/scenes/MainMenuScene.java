@@ -42,6 +42,11 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
     }
 
     @Override
+    public void onMenuKeyPressed() {
+
+    }
+
+    @Override
     public SceneManager.SceneType getSceneType() {
         return SceneManager.SceneType.SCENE_MENU;
     }

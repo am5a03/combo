@@ -7,8 +7,8 @@ public class Constants {
 
     public static final String CONFIG_FILE_PATH = "config.json";
 
-    public static final int CAMERA_WIDTH = 1080;
-    public static final int CAMERA_HEIGHT = 1920;
+    public static final int CAMERA_WIDTH = 540;
+    public static final int CAMERA_HEIGHT = 960;
 
     public static final int CAMERA_CENTER_WIDTH = CAMERA_WIDTH / 2;
     public static final int CAMERA_CENTER_HEIGHT = CAMERA_HEIGHT / 2;

@@ -6,6 +6,10 @@ import org.andengine.engine.camera.hud.HUD;
 import org.andengine.engine.handler.timer.ITimerCallback;
 import org.andengine.engine.handler.timer.TimerHandler;
 import org.andengine.entity.scene.background.Background;
+import org.andengine.entity.scene.menu.MenuScene;
+import org.andengine.entity.scene.menu.item.IMenuItem;
+import org.andengine.entity.scene.menu.item.TextMenuItem;
+import org.andengine.entity.scene.menu.item.decorator.ScaleMenuItemDecorator;
 import org.andengine.entity.text.TextOptions;
 import org.andengine.util.adt.align.HorizontalAlign;
 
@@ -24,7 +28,7 @@ import dnomyar.combo.utils.ColorUtils;
 /**
  * Created by Raymond on 2015-01-04.
  */
-public class GameScene extends BaseScene implements IGameBoardStateListener {
+public class GameScene extends BaseScene implements IGameBoardStateListener, MenuScene.IOnMenuItemClickListener {
 
     private static final int START_LEVEL = 1;
     private static final int MAX_LEVEL = 140;
@@ -39,35 +43,70 @@ public class GameScene extends BaseScene implements IGameBoardStateListener {
     private static final long END_TIME = 45000; //End after x milliseconds
     private static final long COMBO_END_TIME = 5000;
 
-    private HUD gameHUD;
-    private ScoreText scoreText;
-    private ComboText comboText;
-    private Control control;
-    private ProgressBar progressBar;
-    private ProgressBar comboProgressBar;
+    protected static final int MENU_PAUSE = 0;
 
-    private int level;
-    private long estFinishTime;
-    private long estComboFinishTime;
-    private int comboCount = 0;
-    private long score = 0;
-    private int currentScore = 0;
-    private long maxCombo = 0;
+    private HUD mGameHUD;
+    private ScoreText mScoreText;
+    private ComboText mComboText;
+    private Control mControl;
+    private ProgressBar mProgressBar;
+    private ProgressBar mComboProgressBar;
+    private MenuScene mMenuScene;
+
+    private long mCurrentTime;
+    private long mRemainingTime;
+    private long mComboRemainingTime;
+    private int mLevel;
+    private long mEstFinishTime;
+    private long mEstComboFinishTime;
+    private int mComboCount = 0;
+    private long mScore = 0;
+    private int mCurrentScore = 0;
+    private long mMaxCombo = 0;
+
+    private boolean isPaused = false;
 
     @Override
     public void createScene() {
         createBackground();
         createHUD();
-        this.level = START_LEVEL;
-        this.score = 0;
-        this.estFinishTime = System.currentTimeMillis() + END_TIME;
-        this.createGameBoard(this.level);
+        createMenuScene();
+        this.mLevel = START_LEVEL;
+        this.mScore = 0;
+        this.mCurrentTime = System.currentTimeMillis();
+        this.mRemainingTime = END_TIME;
+        this.mEstFinishTime = mCurrentTime + mRemainingTime;
+        this.createGameBoard(this.mLevel);
         this.registerUpdateHandler();
     }
 
     @Override
     public void onBackKeyPressed() {
         SceneManager.getInstance().loadMenuScene(engine);
+    }
+
+    @Override
+    public void onMenuKeyPressed() {
+        if (this.hasChildScene()) {
+            this.isPaused = false;
+            for(RectangleButton rb : mControl.getButtons()) {
+                this.mGameHUD.registerTouchArea(rb);
+            }
+            this.mCurrentTime = System.currentTimeMillis();
+            this.mEstFinishTime = this.mCurrentTime + this.mRemainingTime;
+            this.mEstComboFinishTime = this.mCurrentTime + this.mComboRemainingTime;
+            this.mMenuScene.back();
+        } else {
+            // On pause
+            this.isPaused = true;
+            for(RectangleButton rb : mControl.getButtons()) {
+                this.mGameHUD.unregisterTouchArea(rb);
+            }
+            this.mRemainingTime = this.mEstFinishTime - System.currentTimeMillis();
+            this.mComboRemainingTime = Math.max(0, this.mEstComboFinishTime - System.currentTimeMillis());
+            this.setChildScene(this.mMenuScene, false, true, true);
+
+        }
     }
 
     @Override
@@ -88,41 +127,41 @@ public class GameScene extends BaseScene implements IGameBoardStateListener {
     }
 
     private void createHUD() {
-        gameHUD = new HUD();
+        mGameHUD = new HUD();
         camera.setCenter(CAMERA_CENTER_POS_X, CAMERA_CENTER_POS_Y);
-        scoreText = new ScoreText(CAMERA_CENTER_POS_X/2, CAMERA_HEIGHT - 50, resourcesManager.mFont, "Score: 0123456789", new TextOptions(HorizontalAlign.LEFT), vbom);
-        comboText = new ComboText(CAMERA_CENTER_POS_X, CAMERA_HEIGHT - 90, resourcesManager.mFont, "x1234567890", new TextOptions(HorizontalAlign.RIGHT), vbom);
-        comboText.setText("");
-        control = new Control(CAMERA_CENTER_POS_X/2, CAMERA_CENTER_POS_Y/6, CAMERA_WIDTH, CAMERA_HEIGHT, vbom);
-        progressBar = new ProgressBar(CAMERA_CENTER_WIDTH, CAMERA_HEIGHT, CAMERA_WIDTH, 25, vbom);
-        comboProgressBar = new ProgressBar(CAMERA_CENTER_WIDTH, CAMERA_HEIGHT - 15, CAMERA_WIDTH/2, 10, vbom);
+        mScoreText = new ScoreText(CAMERA_CENTER_POS_X/2, CAMERA_HEIGHT - 50, resourcesManager.mFont, "Score: 0123456789", new TextOptions(HorizontalAlign.LEFT), vbom);
+        mComboText = new ComboText(CAMERA_CENTER_POS_X, CAMERA_HEIGHT - 90, resourcesManager.mFont, "x1234567890", new TextOptions(HorizontalAlign.RIGHT), vbom);
+        mComboText.setText("");
+        mControl = new Control(CAMERA_CENTER_POS_X/2, CAMERA_CENTER_POS_Y/6, CAMERA_WIDTH, CAMERA_HEIGHT, vbom);
+        mProgressBar = new ProgressBar(CAMERA_CENTER_WIDTH, CAMERA_HEIGHT, CAMERA_WIDTH, 25, vbom);
+        mComboProgressBar = new ProgressBar(CAMERA_CENTER_WIDTH, CAMERA_HEIGHT - 15, CAMERA_WIDTH/2, 10, vbom);
 
 
-        gameHUD.attachChild(scoreText);
-        gameHUD.attachChild(control);
-        gameHUD.attachChild(progressBar);
-        gameHUD.attachChild(comboText);
-        gameHUD.attachChild(comboProgressBar);
+        mGameHUD.attachChild(mScoreText);
+        mGameHUD.attachChild(mControl);
+        mGameHUD.attachChild(mProgressBar);
+        mGameHUD.attachChild(mComboText);
+        mGameHUD.attachChild(mComboProgressBar);
 
-        progressBar.setProgress(END_TIME/DEFAULT_GAME_TIME);
-        comboProgressBar.setProgress(0);
+        mProgressBar.setProgress(END_TIME / DEFAULT_GAME_TIME);
+        mComboProgressBar.setProgress(0);
 
 
-        for (RectangleButton rb : control.getButtons()) {
-            gameHUD.registerTouchArea(rb);
+        for (RectangleButton rb : mControl.getButtons()) {
+            mGameHUD.registerTouchArea(rb);
         }
 
-        gameHUD.setTouchAreaBindingOnActionDownEnabled(true);
-        gameHUD.setTouchAreaBindingOnActionMoveEnabled(false);
+        mGameHUD.setTouchAreaBindingOnActionDownEnabled(false);
+        mGameHUD.setTouchAreaBindingOnActionMoveEnabled(false);
 
-//        scoreText.addScore(10000);
-        camera.setHUD(gameHUD);
+//        mScoreText.addScore(10000);
+        camera.setHUD(mGameHUD);
     }
 
     private void createGameBoard(int level) {
-        Log.d("Level", this.level + "..... ");
+        Log.d("Level", this.mLevel + "..... ");
         GameBoard b = new GameBoard(CAMERA_CENTER_POS_X, CAMERA_CENTER_POS_Y + (int)(CAMERA_HEIGHT*0.1), CAMERA_WIDTH, (int)(CAMERA_HEIGHT/2), vbom, level);
-        control.setListenerForColorButtons(b);
+        mControl.setListenerForColorButtons(b);
         this.attachChild(b);
         b.setGameBoardStateListener(this);
     }
@@ -133,20 +172,20 @@ public class GameScene extends BaseScene implements IGameBoardStateListener {
             @Override
             public void onTimePassed(TimerHandler pTimerHandler) {
                 long currentTime = System.currentTimeMillis();
-                long diffInGameTime = (estFinishTime - currentTime);
-                long diffInComboTime = (estComboFinishTime - currentTime);
+                long diffInGameTime = (mEstFinishTime - currentTime);
+                long diffInComboTime = (mEstComboFinishTime - currentTime);
                 diffInComboTime = (diffInComboTime < 0) ? 0 : diffInComboTime;
 
-                GameScene.this.progressBar.setProgress(diffInGameTime/DEFAULT_GAME_TIME);
-                GameScene.this.comboProgressBar.setProgress(diffInComboTime/DEFAULT_COMBO_TIME);
+                GameScene.this.mProgressBar.setProgress(diffInGameTime / DEFAULT_GAME_TIME);
+                GameScene.this.mComboProgressBar.setProgress(diffInComboTime / DEFAULT_COMBO_TIME);
 
 
-                if (currentTime >= estComboFinishTime) {
+                if (currentTime >= mEstComboFinishTime) {
                     GameScene.this.resetComob();
                 }
 
-                if (currentTime >= estFinishTime) {
-                    GameScene.this.progressBar.setProgress(0);
+                if (currentTime >= mEstFinishTime) {
+                    GameScene.this.mProgressBar.setProgress(0);
                     GameScene.this.unregisterUpdateHandler(pTimerHandler);
                     GameScene.this.gameOver();
                 }
@@ -156,92 +195,116 @@ public class GameScene extends BaseScene implements IGameBoardStateListener {
 
     }
 
+    private void createMenuScene() {
+        this.mMenuScene = new MenuScene(camera);
+        final IMenuItem pauseMenuItem = new ScaleMenuItemDecorator(new TextMenuItem(MENU_PAUSE, resourcesManager.mFont, "PAUSE", vbom), 1.0f, 1.0f);
+
+        this.mMenuScene.addMenuItem(pauseMenuItem);
+        this.mMenuScene.buildAnimations();
+        this.mMenuScene.setBackgroundEnabled(false);
+        this.mMenuScene.setOnMenuItemClickListener(this);
+    }
+
     @Override
     public void onWon() {
         long currentTime = System.currentTimeMillis();
-        if (currentTime >= estFinishTime) {
+        if (currentTime >= mEstFinishTime) {
             return;
         }
-        this.level = Math.min(++this.level, MAX_LEVEL);
-        int multiplier = (this.comboCount == 0) ? 1 : this.comboCount;
-        this.score += (this.currentScore * multiplier == 0) ? 1 : this.currentScore * multiplier;
+        this.mLevel = Math.min(++this.mLevel, MAX_LEVEL);
+        int multiplier = (this.mComboCount == 0) ? 1 : this.mComboCount;
+        this.mScore += (this.mCurrentScore * multiplier == 0) ? 1 : this.mCurrentScore * multiplier;
 
         this.detachChildren();
-        this.createGameBoard(this.level);
+        this.createGameBoard(this.mLevel);
 
-        this.scoreText.setScore(this.score);
-        this.currentScore = 0;
+        this.mScoreText.setScore(this.mScore);
+        this.mCurrentScore = 0;
 
         Log.d("GameScene", "Won");
-        if ((estFinishTime - currentTime) <= DEFAULT_GAME_TIME) {
-            this.estFinishTime += BASE_BONUS_TIME;
-            if (this.estComboFinishTime <= 0) {
-                this.estComboFinishTime = System.currentTimeMillis() + COMBO_END_TIME;
+        if ((mEstFinishTime - currentTime) <= DEFAULT_GAME_TIME) {
+            this.mEstFinishTime += BASE_BONUS_TIME;
+            if (this.mEstComboFinishTime <= 0) {
+                this.mEstComboFinishTime = System.currentTimeMillis() + COMBO_END_TIME;
             } else {
-                this.estComboFinishTime += BASE_COMBO_BONUS_TIME; // Extending the combo time
+                this.mEstComboFinishTime += BASE_COMBO_BONUS_TIME; // Extending the combo time
             }
         }
 
-        this.comboCount++;
-        this.comboText.setComboTextAccordingToComboCount(this.comboCount);
+        this.mComboCount++;
+        this.mComboText.setComboTextAccordingToComboCount(this.mComboCount);
 
     }
 
     @Override
     public void onMiss() {
         long currentTime = System.currentTimeMillis();
-        if (currentTime >= estFinishTime) {
+        if (currentTime >= mEstFinishTime) {
             return;
         }
         Log.d("GameScene", "Miss");
         this.detachChildren();
-        this.createGameBoard(this.level);
-        this.comboCount = 0;
-        this.currentScore = 0;
-        this.estFinishTime -= PENALTY_TIME;
-        this.progressBar.setProgress((estFinishTime - currentTime)/DEFAULT_GAME_TIME);
+        this.createGameBoard(this.mLevel);
+        this.mComboCount = 0;
+        this.mCurrentScore = 0;
+        this.mEstFinishTime -= PENALTY_TIME;
+        this.mProgressBar.setProgress((mEstFinishTime - currentTime) / DEFAULT_GAME_TIME);
         this.resetComob();
     }
 
     @Override
     public void onHit() {
         long currentTime = System.currentTimeMillis();
-        if (currentTime >= estFinishTime) {
+        if (currentTime >= mEstFinishTime) {
             return;
         }
         Log.d("GameScene", "Hit");
-        this.comboCount++;
-        this.currentScore++;
-        this.comboText.setComboTextAccordingToComboCount(this.comboCount);
-        if (this.estComboFinishTime <= 0) {
-            this.estComboFinishTime = System.currentTimeMillis() + COMBO_END_TIME;
+        this.mComboCount++;
+        this.mCurrentScore++;
+        this.mComboText.setComboTextAccordingToComboCount(this.mComboCount);
+        if (this.mEstComboFinishTime <= 0) {
+            this.mEstComboFinishTime = System.currentTimeMillis() + COMBO_END_TIME;
         } else {
-            this.estComboFinishTime += BASE_COMBO_BONUS_TIME; // Extending the combo time
+            this.mEstComboFinishTime += BASE_COMBO_BONUS_TIME; // Extending the combo time
         }
-        if (this.comboCount > maxCombo) {
-            this.maxCombo = this.comboCount;
+        if (this.mComboCount > mMaxCombo) {
+            this.mMaxCombo = this.mComboCount;
         }
     }
 
+
+    /**
+     * Gameover action
+     */
     protected void gameOver() {
-        int multiplier = (this.comboCount == 0) ? 1 : this.comboCount;
-        this.score += this.currentScore * multiplier;
-        this.scoreText.setScore(this.score);
-        this.gameHUD.clearTouchAreas();
+        int multiplier = (this.mComboCount == 0) ? 1 : this.mComboCount;
+        this.mScore += this.mCurrentScore * multiplier;
+        this.mScoreText.setScore(this.mScore);
+        this.mGameHUD.clearTouchAreas();
         this.resetComob();
 
         Stat stat = new Stat();
-        stat.setScore(this.score);
-        stat.setLevel(this.level);
-        stat.setCombo(this.maxCombo);
+        stat.setScore(this.mScore);
+        stat.setLevel(this.mLevel);
+        stat.setCombo(this.mMaxCombo);
         SceneManager.getInstance().createGameOverScene(stat);
     }
 
     private void resetComob() {
-        this.comboText.reset();
-        this.comboProgressBar.setProgress(0);
-        this.estComboFinishTime = 0;
-        this.comboCount = 0;
+        this.mComboText.reset();
+        this.mComboProgressBar.setProgress(0);
+        this.mEstComboFinishTime = 0;
+        this.mComboCount = 0;
+        this.mComboRemainingTime = 0;
     }
 
+    @Override
+    public boolean onMenuItemClicked(MenuScene pMenuScene, IMenuItem pMenuItem, float pMenuItemLocalX, float pMenuItemLocalY) {
+        switch (pMenuItem.getID()) {
+            case MENU_PAUSE:
+                return false;
+            default:
+                return false;
+        }
+    }
 }

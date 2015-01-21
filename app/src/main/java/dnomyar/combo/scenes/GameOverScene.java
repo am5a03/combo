@@ -56,6 +56,11 @@ public class GameOverScene extends BaseScene implements MenuScene.IOnMenuItemCli
     }
 
     @Override
+    public void onMenuKeyPressed() {
+
+    }
+
+    @Override
     public SceneManager.SceneType getSceneType() {
         return SceneManager.SceneType.SCENE_GAME_OVER;
     }
