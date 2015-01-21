@@ -7,3 +7,6 @@
 *.iml
 .idea/
 *.apk
+/gradle.properties
+*.jks
+*.keystore

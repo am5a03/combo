@@ -8,13 +8,33 @@ android {
         applicationId "dnomyar.combo"
         minSdkVersion 15
         targetSdkVersion 21
-        versionCode 1
-        versionName "1.0"
+        versionCode 101
+        versionName "1.0.1"
+    }
+    signingConfigs {
+        release {
+            storeFile file(keystore_path)
+            storePassword keystore_storePassword
+            keyAlias keystore_keyAlias
+            keyPassword keystore_keyPassword
+        }
+        debug {
+            storeFile file(keystore_path)
+            storePassword keystore_storePassword
+            keyAlias keystore_keyAlias
+            keyPassword keystore_keyPassword
+        }
     }
     buildTypes {
         release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+        }
+        debug {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.debug
         }
     }
 }
